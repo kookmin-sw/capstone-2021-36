@@ -28,7 +28,7 @@
 - 여정화
 - 강경민
 
-**팀페이지 주소** -> https://kookmin-sw.github.io/capstone-2020-36/
+**팀페이지 주소** -> https://kookmin-sw.github.io/capstone-2021-36/
 
 ### 4. 사용법
 
