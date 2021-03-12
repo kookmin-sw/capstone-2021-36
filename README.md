@@ -33,7 +33,10 @@
 - 김하연(20180086)
   - 이메일 : hayeon2401@naver.com
 <img src = "https://user-images.githubusercontent.com/73538957/110902572-74c74600-8349-11eb-9dd5-469cad39c5f9.png" width="300px" height="400px">
+
+
 - 여정화(20182280)
+  - 이메일 : 22sonamu@naver.com
 <img src = "https://user-images.githubusercontent.com/73538957/110902700-a3452100-8349-11eb-9b4d-08e1e8c3fd7e.png" width="300px" height="400px">
 
 - 강경민(20151352)
