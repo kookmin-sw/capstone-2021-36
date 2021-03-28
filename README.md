@@ -63,7 +63,7 @@
 
 ```
 이메일 : kkgm94@naver.com
-역할 : 프론트 
+역할 : 프론트엔드
 ```
 
 **팀페이지 주소** -> https:// kookmin-sw.github.io/capstone-2021-36/
