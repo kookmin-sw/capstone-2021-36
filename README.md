@@ -27,22 +27,44 @@
 ### 3. 팀 소개
 
 - 안중민(20171644)
-  - 이메일 : qqqskd98@gmail.com
- <img src = "https://user-images.githubusercontent.com/73538957/110902317-0d10fb00-8349-11eb-9868-38bff6f675e0.png" width="300px" height="400px">
+  
+ <img src = "https://user-images.githubusercontent.com/73538957/110902317-0d10fb00-8349-11eb-9868-38bff6f675e0.png" width="200px" height="300px">
+
+
+```
+ 이메일 : qqqskd98@gmail.com
+ 역할 : 깃허브 관리, 프론트
+```
+ 
 
 - 김하연(20180086)
-  - 이메일 : hayeon2401@naver.com
-<img src = "https://user-images.githubusercontent.com/73538957/110902572-74c74600-8349-11eb-9dd5-469cad39c5f9.png" width="300px" height="400px">
+
+<img src = "https://user-images.githubusercontent.com/73538957/110902572-74c74600-8349-11eb-9dd5-469cad39c5f9.png" width="200px" height="300px">
+
+```
+이메일 : hayeon2401@naver.com
+역할 : 프론트
+```
 
 
 - 여정화(20182280)
-  - 이메일 : 22sonamu@naver.com
-<img src = "https://user-images.githubusercontent.com/73538957/110902700-a3452100-8349-11eb-9b4d-08e1e8c3fd7e.png" width="300px" height="400px">
+
+<img src = "https://user-images.githubusercontent.com/73538957/110902700-a3452100-8349-11eb-9b4d-08e1e8c3fd7e.png" width="200px" height="300px">
+
+```
+이메일 : 22sonamu@naver.com
+역할 : 깃허브 관리 , 프론트
+```
 
 - 강경민(20151352)
-  - 이메일 : kkgm94@naver.com
 
-<img src = "https://user-images.githubusercontent.com/73538957/110902819-cd96de80-8349-11eb-9d9d-87a78f9a1a1a.png" width="300px" height="400px">
+
+<img src = "https://user-images.githubusercontent.com/73538957/110902819-cd96de80-8349-11eb-9d9d-87a78f9a1a1a.png" width="200px" height="300px">
+
+```
+이메일 : kkgm94@naver.com
+역할 : 프론트 
+```
 
 **팀페이지 주소** -> https:// kookmin-sw.github.io/capstone-2021-36/
 
