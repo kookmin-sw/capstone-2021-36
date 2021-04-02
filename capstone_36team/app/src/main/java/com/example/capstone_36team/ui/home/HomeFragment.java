@@ -5,7 +5,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -44,6 +46,10 @@ public class HomeFragment extends Fragment {
 
             }
         });
+        final String[] LIST_MENU = {"방1", "방2", "방3"} ; //데이터 담는 부분
+        ArrayAdapter<String> listViewAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, LIST_MENU);
+        final ListView listview = root.findViewById(R.id.listview_place);
+        listview.setAdapter(listViewAdapter);
         return root;
 
 
