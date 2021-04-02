@@ -26,6 +26,9 @@
 
 ### 3. 팀 소개
 
+[**팀페이지**](https://kookmin-sw.github.io/capstone-2021-36/)
+
+
 - 안중민(20171644)
   
  <img src = "https://user-images.githubusercontent.com/73538957/110902317-0d10fb00-8349-11eb-9868-38bff6f675e0.png" width="200px" height="300px">
@@ -66,7 +69,6 @@
 역할 : 프론트
 ```
 
-[**팀페이지**](https:// kookmin-sw.github.io/capstone-2021-36/)
 
 ### 4. 사용법
 
