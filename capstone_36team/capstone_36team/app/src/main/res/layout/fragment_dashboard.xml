@@ -8,7 +8,8 @@
     android:orientation="vertical">
     <ListView
         android:layout_width="match_parent"
-        android:layout_height="500dp"/>
+        android:layout_height="500dp"
+        android:id="@+id/listview_food"/>
 
     <Button
         android:id="@+id/btn_add_food"

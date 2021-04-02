@@ -5,7 +5,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -42,6 +44,16 @@ public class DashboardFragment extends Fragment {
 
             }
         });
+        //리스트 뷰 어뎁터
+        final String[] LIST_MENU = {"냉장고1", "냉장고2", "냉장고3"} ; //데이터 담는 부분
+        ArrayAdapter<String>listViewAdapter = new ArrayAdapter<String>(
+                getActivity(),
+                android.R.layout.simple_list_item_1,
+                LIST_MENU
+        );
+        final ListView listview = root.findViewById(R.id.listview_food);
+        listview.setAdapter(listViewAdapter);
+
         return root;
     }
     private void openDialog() { //dialog 관련 함수
@@ -53,4 +65,6 @@ public class DashboardFragment extends Fragment {
         myDialogFragment.show(getFragmentManager(), "Search Filter");
 
     }
+
+
 }
