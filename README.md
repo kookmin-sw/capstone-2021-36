@@ -63,10 +63,10 @@
 
 ```
 이메일 : kkgm94@naver.com
-역할 : 프론트엔드
+역할 : 프론트
 ```
 
-**팀페이지 주소** -> https:// kookmin-sw.github.io/capstone-2021-36/
+**팀페이지 주소** -> <https:// kookmin-sw.github.io/capstone-2021-36/>
 
 ### 4. 사용법
 
