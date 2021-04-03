@@ -32,9 +32,7 @@
 
 ### 2. 소개 영상
 
-<img src = "https://user-images.githubusercontent.com/73538957/110810764-73eecf80-82c9-11eb-9122-71162335cf61.png" width="400px">
 
-<img src = "https://user-images.githubusercontent.com/73538957/110810933-9a146f80-82c9-11eb-9a8c-dc68fbe8bda2.png" width="400px">
 
 ### 3. 팀 소개
 
