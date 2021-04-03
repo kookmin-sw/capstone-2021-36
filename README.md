@@ -7,6 +7,15 @@
 
 ### 1. 프로젝트 소개
 
+
+
+하우스피디아(HousePedia)
+
+![image](https://user-images.githubusercontent.com/73538957/113483646-7c5cb380-94df-11eb-9993-ccc7141503f1.png)
+
+
+
+
 - 집안의 냉장고, 물건 현황(종류 , 갯수, 위치 등) 기록 어플리케이션
   - 회원 가입 
     - 여러 기기에서 사용 가능
@@ -15,6 +24,7 @@
     - 장소 추가 기능
     - 수량 변경 기능
     - 위치 변경 기록 기능
+    - 위치 검색 기능
   - 냉장고 기록
     - 레시피 추천 기능
     - 유통기한 알람 기능
@@ -33,7 +43,7 @@
 
 - 안중민(20171644)
   
- <img src = "https://user-images.githubusercontent.com/73538957/110902317-0d10fb00-8349-11eb-9868-38bff6f675e0.png" width="200px" height="300px">
+ 
 
 
 ```
@@ -44,7 +54,7 @@
 
 - 김하연(20180086)
 
-<img src = "https://user-images.githubusercontent.com/73538957/110902572-74c74600-8349-11eb-9dd5-469cad39c5f9.png" width="200px" height="300px">
+
 
 ```
 이메일 : hayeon2401@naver.com
@@ -54,7 +64,7 @@
 
 - 여정화(20182280)
 
-<img src = "https://user-images.githubusercontent.com/73538957/110902700-a3452100-8349-11eb-9b4d-08e1e8c3fd7e.png" width="200px" height="300px">
+
 
 ```
 이메일 : 22sonamu@naver.com
@@ -64,7 +74,7 @@
 - 강경민(20151352)
 
 
-<img src = "https://user-images.githubusercontent.com/73538957/110902819-cd96de80-8349-11eb-9d9d-87a78f9a1a1a.png" width="200px" height="300px">
+
 
 ```
 이메일 : kkgm94@naver.com
