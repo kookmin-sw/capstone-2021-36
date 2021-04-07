@@ -39,7 +39,7 @@
 
 ### 3. 팀 소개
 
-[**팀페이지**](https://kookmin-sw.github.io/capstone-2021-36/)
+[**팀페이지**](https://github.com/kookmin-sw/capstone-2021-36)
 
 
 - 안중민(20171644)
