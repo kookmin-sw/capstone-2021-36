@@ -1,14 +1,15 @@
 package com.example.capstone_36team.ui.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,6 +19,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.capstone_36team.R;
+import com.example.capstone_36team.RoomActivity;
 
 public class HomeFragment extends Fragment {
 
@@ -50,7 +52,21 @@ public class HomeFragment extends Fragment {
         ArrayAdapter<String> listViewAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, LIST_MENU);
         final ListView listview = root.findViewById(R.id.listview_place);
         listview.setAdapter(listViewAdapter);
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() { //리스트뷰 클릭시
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String category = LIST_MENU[position];
+                Intent intent = new Intent(getActivity(), RoomActivity.class);
+                startActivity(intent);
+
+            }
+        });
+
+
+
         return root;
+
+
 
 
     }
