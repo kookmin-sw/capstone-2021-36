@@ -77,8 +77,9 @@ public class FoodActivity extends AppCompatActivity {
 
 
                 dilaog01.dismiss(); // 다이얼로그 닫기
-                Camera();
                 rnjsgks();
+                Camera();
+
 
 
             }
