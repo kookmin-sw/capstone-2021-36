@@ -48,8 +48,8 @@
 
 
 ```
- :postbox: 이메일 : qqqskd98@gmail.com
- :paperclip: 역할 : 깃허브 관리, 프론트, 발표 대본 제작
+ 이메일 : qqqskd98@gmail.com
+ 역할 : 깃허브 관리, 프론트, 발표 대본 제작
 ```
  
 
@@ -58,8 +58,8 @@
 
 
 ```
-:postbox: 이메일 : hayeon2401@naver.com
-:paperclip: 역할 : 프론트, 발표 ppt 제작
+이메일 : hayeon2401@naver.com
+:역할 : 프론트, 발표 ppt 제작
 ```
 
 
@@ -68,8 +68,8 @@
 
 
 ```
-:postbox: 이메일 : 22sonamu@naver.com
-:paperclip: 역할 : 깃허브 관리 , 프론트 , 소개 영상 제작
+이메일 : 22sonamu@naver.com
+역할 : 깃허브 관리 , 프론트 , 소개 영상 제작
 ```
 
 :balloon:강경민(20151352)
@@ -78,8 +78,8 @@
 
 
 ```
-:postbox: 이메일 : kkgm94@naver.com
-:paperclip:역할 : 프론트, 포스터 제작
+이메일 : kkgm94@naver.com
+역할 : 프론트, 포스터 제작
 ```
 
 
