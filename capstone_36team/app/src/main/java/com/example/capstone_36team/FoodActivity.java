@@ -36,9 +36,12 @@ import java.util.Date;
 public class FoodActivity extends AppCompatActivity {
     private Button btn_add_food;
     private Dialog dilaog01;
+    private Dialog dialog02;
     private static final int REQUEST_IMAGE_CAPTURE = 672;
     private String imageFilePath;
     private Uri photoUri;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +51,10 @@ public class FoodActivity extends AppCompatActivity {
         dilaog01 = new Dialog(FoodActivity.this);       // Dialog 초기화
         dilaog01.requestWindowFeature(Window.FEATURE_NO_TITLE); // 타이틀 제거
         dilaog01.setContentView(R.layout.barcodeorcustom);
+        dialog02 = new Dialog(FoodActivity.this);       // Dialog 초기화
+        dialog02.requestWindowFeature(Window.FEATURE_NO_TITLE); // 타이틀 제거
+        dialog02.setContentView(R.layout.plus_dialog_layout);
+
 
 
         btn_add_food.setOnClickListener(new View.OnClickListener() {
@@ -60,11 +67,7 @@ public class FoodActivity extends AppCompatActivity {
     public void showDialog01(){ //다이얼로그 함수
         dilaog01.show(); // 다이얼로그 띄우기
 
-        /* 이 함수 안에 원하는 디자인과 기능을 구현하면 된다. */
 
-        // 위젯 연결 방식은 각자 취향대로~
-        // '아래 아니오 버튼'처럼 일반적인 방법대로 연결하면 재사용에 용이하고,
-        // '아래 네 버튼'처럼 바로 연결하면 일회성으로 사용하기 편함.
         // *주의할 점: findViewById()를 쓸 때는 -> 앞에 반드시 다이얼로그 이름을 붙여야 한다.
 
 
@@ -91,6 +94,7 @@ public class FoodActivity extends AppCompatActivity {
                 Log.d("확인", "수동으로 등록 클릭됨");
                 // 원하는 기능 구현
                 dilaog01.dismiss();
+                showDialog02();
             }
         });
     }
@@ -189,6 +193,35 @@ public class FoodActivity extends AppCompatActivity {
 
         }
     };
+    public void showDialog02(){ //수동으로 입력 클릭하면 나오는다이얼로그 함수
+
+        dialog02.show(); // 다이얼로그 띄우기
+        Button plus_button = dialog02.findViewById(R.id.plus_button);
+        plus_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) { //등록
+                Log.d("확인", "등록 클릭됨");
+                // 원하는 기능 구현
+
+
+                dialog02.dismiss(); // 다이얼로그 닫기
+
+
+
+
+            }
+        });
+        Button no_plus_button = dialog02.findViewById(R.id.no_plus_button);
+        no_plus_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) { //취소
+                Log.d("확인", "취소 클릭됨");
+                // 원하는 기능 구현
+                dialog02.dismiss();
+            }
+        });
+    }
+
 
 
 
