@@ -1,20 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".RoomActivity"
     android:orientation="vertical">
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:id="@+id/listview_place"/>
 
-    <Button
-        android:id="@+id/btn_add_place"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:text="추가"
-        />
-</LinearLayout>
+        android:layout_height="0dp"
+        android:layout_rowWeight="8"
+        android:id="@+id/toplinear"
+        android:background="@drawable/normal_shape"
+        android:orientation="horizontal"></LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_rowWeight="1"
+        android:orientation="horizontal"
+        android:id="@+id/bottomlinear">
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="300dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_launcher_foreground"/>
+    </LinearLayout>
+
+
+
+</GridLayout>
