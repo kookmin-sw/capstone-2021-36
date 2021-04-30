@@ -37,7 +37,13 @@
 
 
 
-### 3. :ghost: 팀 소개
+### 3. 🚩 소개 포스터
+
+
+![image](https://user-images.githubusercontent.com/73538957/116708858-16dee280-aa0b-11eb-9de3-5d0a05a2ad0e.png)
+
+
+### 4. :ghost: 팀 소개
 
 [**팀페이지**](https://github.com/kookmin-sw/capstone-2021-36/)
 
@@ -83,11 +89,11 @@
 ```
 
 
-### 4. :key: 사용법
+### 5. :key: 사용법
 
 
 
-### 5. 기타
+### 6. 기타
 
 
 
