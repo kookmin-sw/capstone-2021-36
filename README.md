@@ -40,7 +40,7 @@
 ### 3. 🚩 소개 포스터
 
 
-![image](https://user-images.githubusercontent.com/73538957/116708858-16dee280-aa0b-11eb-9de3-5d0a05a2ad0e.png)
+<img src ="https://user-images.githubusercontent.com/73538957/116708858-16dee280-aa0b-11eb-9de3-5d0a05a2ad0e.png" height=700px width=500dx>
 
 
 ### 4. :ghost: 팀 소개
