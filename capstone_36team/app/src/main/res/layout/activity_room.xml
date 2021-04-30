@@ -11,9 +11,10 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_rowWeight="8"
-        android:id="@+id/toplinear"
+        android:id="@+id/toplinear1"
         android:background="@drawable/normal_shape"
         android:orientation="horizontal"></LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"

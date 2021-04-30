@@ -20,15 +20,23 @@ public class RoomActivity extends AppCompatActivity {
     private static  final String IMAGEVIEW_TAG = "드래그 이미지";
 
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_room);
 
         image = (ImageView) findViewById(R.id.image);
+
+
+
+
+
         image.setOnTouchListener(new MyTouchListener());
 
-        findViewById(R.id.toplinear).setOnDragListener(new DragListner());
+        findViewById(R.id.toplinear1).setOnDragListener(new DragListner());
+
         findViewById(R.id.bottomlinear).setOnDragListener(new DragListner());
 
     }
@@ -84,6 +92,8 @@ public class RoomActivity extends AppCompatActivity {
             return true;
         }
     }
+
+
 }
 
 
