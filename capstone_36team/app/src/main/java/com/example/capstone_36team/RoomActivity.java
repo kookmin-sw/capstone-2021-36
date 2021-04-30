@@ -33,28 +33,52 @@ public class RoomActivity extends AppCompatActivity {
 
 
 
-        image.setOnTouchListener(new MyTouchListener());
+        image.setOnTouchListener(new MyTouchListener()); //가구 이미지 mytouchlistner에 연결
 
-        findViewById(R.id.toplinear1).setOnDragListener(new DragListner());
 
-        findViewById(R.id.bottomlinear).setOnDragListener(new DragListner());
 
     }
     private final class MyTouchListener implements View.OnTouchListener {
-        public boolean onTouch(View view, MotionEvent motionEvent) {
-            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                ClipData data = ClipData.newPlainText("", "");
-                View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(
-                        view);
-                view.startDrag(data, shadowBuilder, view, 0);
-                view.setVisibility(View.INVISIBLE);
-                return true;
-            } else {
-                return false;
+
+        public boolean onTouch(View v, MotionEvent motionEvent) {
+            int oldXvalue;
+            int oldYvalue;
+            int parentWidth = ((ViewGroup)v.getParent()).getWidth();    // 부모 View 의 Width
+            int parentHeight = ((ViewGroup)v.getParent()).getHeight();
+            if(motionEvent.getAction() == MotionEvent.ACTION_DOWN){
+                // 뷰 누름
+                oldXvalue = (int) motionEvent.getX();
+                oldYvalue = (int) motionEvent.getY();
+                Log.d("viewTest", "oldXvalue : "+ oldXvalue + " oldYvalue : " + oldYvalue);    // View 내부에서 터치한 지점의 상대 좌표값.
+                Log.d("viewTest", "v.getX() : "+v.getX());    // View 의 좌측 상단이 되는 지점의 절대 좌표값.
+                Log.d("viewTest", "RawX : " + motionEvent.getRawX() +" RawY : " + motionEvent.getRawY());    // View 를 터치한 지점의 절대 좌표값.
+                Log.d("viewTest", "v.getHeight : " + v.getHeight() + " v.getWidth : " + v.getWidth());    // View 의 Width, Height
+
+            }else if(motionEvent.getAction() == MotionEvent.ACTION_MOVE){
+                // 뷰 이동 중
+                v.setX(v.getX() + (motionEvent.getX()) - (v.getWidth()/2));
+                v.setY(v.getY() + (motionEvent.getY()) - (v.getHeight()/2));
+
+            }else if(motionEvent.getAction() == MotionEvent.ACTION_UP){
+                // 뷰에서 손을 뗌
+
+                if(v.getX() < 0){
+                    v.setX(0);
+                }else if((v.getX() + v.getWidth()) > parentWidth){
+                    v.setX(parentWidth - v.getWidth());
+                }
+
+                if(v.getY() < 0){
+                    v.setY(0);
+                }else if((v.getY() + v.getHeight()) > parentHeight){
+                    v.setY(parentHeight - v.getHeight());
+                }
+
             }
+            return true;
         }
     }
-    class DragListner implements View.OnDragListener {
+    class DragListner implements View.OnDragListener { //드래그 + 위치에 따라 효과 주고싶을때
 
 
         @Override

@@ -5,29 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".RoomActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="#F8F5F5">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_rowWeight="8"
-        android:id="@+id/toplinear1"
-        android:background="@drawable/normal_shape"
-        android:orientation="horizontal"></LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_rowWeight="1"
-        android:orientation="horizontal"
-        android:id="@+id/bottomlinear">
-        <ImageView
-            android:id="@+id/image"
-            android:layout_width="300dp"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_launcher_foreground"/>
-    </LinearLayout>
-
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_row="1"
+        android:layout_column="0"
+        android:src="@drawable/rkrn" />
 
 
 </GridLayout>
