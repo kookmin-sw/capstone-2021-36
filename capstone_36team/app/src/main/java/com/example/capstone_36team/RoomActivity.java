@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ClipData;
 import android.content.ClipDescription;
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,6 +19,7 @@ import android.widget.LinearLayout;
 public class RoomActivity extends AppCompatActivity {
     private ImageView image;
     private static  final String IMAGEVIEW_TAG = "드래그 이미지";
+    private ImageView trash;
 
 
 
@@ -26,10 +28,11 @@ public class RoomActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_room);
-
+        trash = (ImageView) findViewById(R.id.trash);
         image = (ImageView) findViewById(R.id.image);
 
 
+        MyTouchListener myTouchListener = new MyTouchListener();
 
 
 
@@ -39,16 +42,28 @@ public class RoomActivity extends AppCompatActivity {
 
     }
     private final class MyTouchListener implements View.OnTouchListener {
-
+        private View view;
+        private float startXvalue;
+        private float startYvalue;
+        private boolean first = true;
         public boolean onTouch(View v, MotionEvent motionEvent) {
+            this.view = v;
             int oldXvalue;
             int oldYvalue;
             int parentWidth = ((ViewGroup)v.getParent()).getWidth();    // 부모 View 의 Width
             int parentHeight = ((ViewGroup)v.getParent()).getHeight();
+
+
             if(motionEvent.getAction() == MotionEvent.ACTION_DOWN){
                 // 뷰 누름
                 oldXvalue = (int) motionEvent.getX();
                 oldYvalue = (int) motionEvent.getY();
+                if (this.first == true){ //삭제를 위한 코드
+                    startXvalue = v.getX();
+                    startYvalue = v.getY();}
+                this.first = false;
+
+
                 Log.d("viewTest", "oldXvalue : "+ oldXvalue + " oldYvalue : " + oldYvalue);    // View 내부에서 터치한 지점의 상대 좌표값.
                 Log.d("viewTest", "v.getX() : "+v.getX());    // View 의 좌측 상단이 되는 지점의 절대 좌표값.
                 Log.d("viewTest", "RawX : " + motionEvent.getRawX() +" RawY : " + motionEvent.getRawY());    // View 를 터치한 지점의 절대 좌표값.
@@ -73,6 +88,12 @@ public class RoomActivity extends AppCompatActivity {
                 }else if((v.getY() + v.getHeight()) > parentHeight){
                     v.setY(parentHeight - v.getHeight());
                 }
+                if(v.getX() <100 && v.getY()<100){ //삭제
+                    v.setX(startXvalue);
+                    v.setY(startYvalue);
+
+                }
+
 
             }
             return true;
