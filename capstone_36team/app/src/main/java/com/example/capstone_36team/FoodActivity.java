@@ -21,17 +21,30 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.Task;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
+
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class FoodActivity extends AppCompatActivity {
     private Button btn_add_food;
@@ -41,6 +54,11 @@ public class FoodActivity extends AppCompatActivity {
     private String imageFilePath;
     private Uri photoUri;
 
+
+    DatabaseReference mDatabase= FirebaseDatabase.getInstance().getReference();
+    //DatabaseReference conditionRef = mDatabase.child("text");
+//    String userId = "user1";
+//    String FamilyName = mDatabase.child("UserDB").child(userId).get();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +72,8 @@ public class FoodActivity extends AppCompatActivity {
         dialog02 = new Dialog(FoodActivity.this);       // Dialog 초기화
         dialog02.requestWindowFeature(Window.FEATURE_NO_TITLE); // 타이틀 제거
         dialog02.setContentView(R.layout.plus_dialog_layout);
+
+
 
 
 
@@ -193,15 +213,33 @@ public class FoodActivity extends AppCompatActivity {
 
         }
     };
+
     public void showDialog02(){ //수동으로 입력 클릭하면 나오는다이얼로그 함수
 
         dialog02.show(); // 다이얼로그 띄우기
         Button plus_button = dialog02.findViewById(R.id.plus_button);
+
         plus_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) { //등록
-                Log.d("확인", "등록 클릭됨");
+
+                EditText fnameinput = (EditText)dialog02.findViewById(R.id.fnameInput);
+                EditText fposinput = (EditText)dialog02.findViewById(R.id.fposInput);
+                EditText fcountinput = (EditText)dialog02.findViewById(R.id.fcountInput);
+
+
+                String foodname = fnameinput.getText().toString();
+                String f_detail_place = fposinput.getText().toString();
+                int fcount = Integer.parseInt(fcountinput.getText().toString());
+                Map<String, Object> taskMap = new HashMap<String, Object>();
+                taskMap.put("name", foodname);
+                taskMap.put("count", fcount);
+                taskMap.put("place", f_detail_place);
+
+                출처: https://superwony.tistory.com/20 [개발자 키우기]
                 // 원하는 기능 구현
+                mDatabase.child("HomeDB").child("family1").child("Fridge").child(foodname).setValue(taskMap);
+                Log.d("확인", foodname);
 
 
                 dialog02.dismiss(); // 다이얼로그 닫기
