@@ -18,6 +18,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:networkSecurityConfig="@xml/network_config"
         android:theme="@style/Theme.Capstone_36team">
         <activity android:name=".FoodActivity"></activity>
         <activity android:name=".Capture"

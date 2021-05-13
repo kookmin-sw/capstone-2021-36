@@ -16,6 +16,7 @@ import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.media.Image;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -42,6 +43,11 @@ import com.google.firebase.database.ValueEventListener;
 import com.journeyapps.barcodescanner.CaptureActivity;
 
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -58,6 +64,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 public class FoodActivity extends AppCompatActivity {
     private Button btn_add_food;
@@ -201,54 +211,88 @@ public class FoodActivity extends AppCompatActivity {
         intentIntegrator.initiateScan();
 
     }
-    public String getXmlData(){
-        StringBuffer buffer = new StringBuffer();
-        String location = URLEncoder.encode(Barcodedata);
-        String queryUrl = "http://openapi.foodsafetykorea.go.kr/"+key+"/I2570/xml/1/5/BRCD_NO="+Barcodedata;
+//    public String getXmlData(){
+//        StringBuffer buffer = new StringBuffer();
+//        String location = URLEncoder.encode(Barcodedata);
+//        String queryUrl = "http://openapi.foodsafetykorea.go.kr/api/"+key+"/I2570/xml/1/5/BRCD_NO="+Barcodedata;
+//        try{
+//            URL url = new URL(queryUrl); //문자열로 된 요청 url을 URL객체로 생성
+//            InputStream is = url.openStream();
+//
+//            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+//            XmlPullParser xpp = factory.newPullParser();
+//            xpp.setInput(new InputStreamReader(is, "UTF-8"));
+//
+//            String tag;
+//
+//
+//            int eventType = xpp.getEventType();
+//            Log.d("확인", String.valueOf(eventType));
+//            xpp.next();
+//
+//
+//        } catch (MalformedURLException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } catch (XmlPullParserException e) {
+//            e.printStackTrace();
+//        }
+//        buffer.append("파싱 끝\n");
+//        return  buffer.toString();
+//    }
+public class OpenApI extends AsyncTask<Void, Void, String>{
+        private String url;
+        public OpenApI(String url){
+            this.url = url;
+        }
+
+    @Override
+    protected String doInBackground(Void... voids) {
+
+        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder dBuilder = null;
         try{
-            URL url = new URL(queryUrl); //문자열로 된 요청 url을 URL객체로 생성
-            InputStream is = url.openStream();
+            dBuilder = dbFactory.newDocumentBuilder();
 
-            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-            XmlPullParser xpp = factory.newPullParser();
-            xpp.setInput(new InputStreamReader(is, "UTF-8"));
-
-            String tag;
-
-            xpp.next();
-            int eventType = xpp.getEventType();
-            while (eventType != XmlPullParser.END_DOCUMENT){
-                switch (eventType){
-                    case XmlPullParser.START_DOCUMENT:
-                        buffer.append("파싱 시작...\n\n");
-                        break;
-                    case  XmlPullParser.START_TAG:
-                        tag = xpp.getName();
-                        if(tag.equals("PRDT_NM")){
-                            buffer.append("상품명:");
-                            xpp.next();
-                            buffer.append(xpp.nextText());
-
-                        }
-                        break;
-                    case XmlPullParser.TEXT:
-                        break;
-                    case XmlPullParser.END_TAG:
-                        break;
-                }
-                eventType = xpp.next();
-            }
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (XmlPullParserException e) {
+        }catch (ParserConfigurationException e){
             e.printStackTrace();
         }
-        buffer.append("파싱 끝\n");
-        return  buffer.toString();
+        Document doc = null;
+        try{
+            doc = dBuilder.parse(url);
+        }catch (IOException| SAXException e){
+            e.printStackTrace();
+        }
+
+        //root tag
+        doc.getDocumentElement().normalize();
+
+        //파싱할 tag
+        NodeList nList = doc.getElementsByTagName("row id=\"0\"");
+        for (int temp = 0; temp<nList.getLength();temp++){
+            Node nNode = nList.item(temp);
+            if(nNode.getNodeType() == Node.ELEMENT_NODE){
+                Element eElement = (Element) nNode;
+
+                Log.d("오픈",getTagValue("PRDT_NM", eElement));
+            }
+        }
+        return null;
     }
 
+    @Override
+    protected void onPostExecute(String s) {
+        super.onPostExecute(s);
+    }
+    private String getTagValue(String tag, Element eElement){
+            NodeList nList = eElement.getElementsByTagName(tag).item(0).getChildNodes();
+            Node nValue = (Node)nList.item(0);
+            if(nValue == null)
+                return null;
+            return nValue.getNodeValue();
+    }
+}
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -264,8 +308,11 @@ public class FoodActivity extends AppCompatActivity {
             builder.setTitle("결과");
 
             Barcodedata = intentResult.getContents(); //바코드 번호
-            String r = getXmlData();
-            builder.setMessage(r);
+//            getXmlData();
+            String queryUrl = "http://openapi.foodsafetykorea.go.kr/api/"+key+"/I2570/xml/1/1/BRCD_NO="+Barcodedata;
+//            OpenApI dust = new OpenApI(queryUrl);
+//            dust.execute();
+            builder.setMessage(Barcodedata);
             builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int which) {
