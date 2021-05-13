@@ -42,8 +42,17 @@ import com.google.firebase.database.ValueEventListener;
 import com.journeyapps.barcodescanner.CaptureActivity;
 
 
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
+
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -57,6 +66,9 @@ public class FoodActivity extends AppCompatActivity {
     private static final int REQUEST_IMAGE_CAPTURE = 672;
     private String imageFilePath;
     private Uri photoUri;
+    String key = "593cd6a3496d4e1194ff";
+    String Barcodedata ;
+    String data;
 
 
     DatabaseReference mDatabase= FirebaseDatabase.getInstance().getReference();
@@ -189,6 +201,53 @@ public class FoodActivity extends AppCompatActivity {
         intentIntegrator.initiateScan();
 
     }
+    public String getXmlData(){
+        StringBuffer buffer = new StringBuffer();
+        String location = URLEncoder.encode(Barcodedata);
+        String queryUrl = "http://openapi.foodsafetykorea.go.kr/"+key+"/I2570/xml/1/5/BRCD_NO="+Barcodedata;
+        try{
+            URL url = new URL(queryUrl); //문자열로 된 요청 url을 URL객체로 생성
+            InputStream is = url.openStream();
+
+            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+            XmlPullParser xpp = factory.newPullParser();
+            xpp.setInput(new InputStreamReader(is, "UTF-8"));
+
+            String tag;
+
+            xpp.next();
+            int eventType = xpp.getEventType();
+            while (eventType != XmlPullParser.END_DOCUMENT){
+                switch (eventType){
+                    case XmlPullParser.START_DOCUMENT:
+                        buffer.append("파싱 시작...\n\n");
+                        break;
+                    case  XmlPullParser.START_TAG:
+                        tag = xpp.getName();
+                        if(tag.equals("PRDT_NM")){
+                            buffer.append("상품명:");
+                            xpp.next();
+                            buffer.append(xpp.nextText());
+
+                        }
+                        break;
+                    case XmlPullParser.TEXT:
+                        break;
+                    case XmlPullParser.END_TAG:
+                        break;
+                }
+                eventType = xpp.next();
+            }
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        }
+        buffer.append("파싱 끝\n");
+        return  buffer.toString();
+    }
 
 
     @Override
@@ -203,8 +262,10 @@ public class FoodActivity extends AppCompatActivity {
                     FoodActivity.this
             );
             builder.setTitle("결과");
-            builder.setMessage(intentResult.getContents());
-            String BarcodeString = intentResult.getContents(); //바코드 번호
+
+            Barcodedata = intentResult.getContents(); //바코드 번호
+            String r = getXmlData();
+            builder.setMessage(r);
             builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int which) {
