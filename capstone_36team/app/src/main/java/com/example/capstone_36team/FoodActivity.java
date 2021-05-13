@@ -264,7 +264,7 @@ public class OpenApI extends AsyncTask<Void, Void, String>{
         }catch (IOException| SAXException e){
             e.printStackTrace();
         }
-
+        dbFactory.setIgnoringElementContentWhitespace(true);
         //root tag
         doc.getDocumentElement().normalize();
 
@@ -309,7 +309,8 @@ public class OpenApI extends AsyncTask<Void, Void, String>{
 
             Barcodedata = intentResult.getContents(); //바코드 번호
 //            getXmlData();
-            String queryUrl = "http://openapi.foodsafetykorea.go.kr/api/"+key+"/I2570/xml/1/1/BRCD_NO="+Barcodedata;
+
+            String queryUrl = "http://openapi.foodsafetykorea.go.kr/api/".concat(key).concat("/I2570/xml/1/1/BRCD_NO=").concat(Barcodedata);
 //            OpenApI dust = new OpenApI(queryUrl);
 //            dust.execute();
             builder.setMessage(Barcodedata);
