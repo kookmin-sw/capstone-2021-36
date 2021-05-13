@@ -241,58 +241,7 @@ public class FoodActivity extends AppCompatActivity {
 //        buffer.append("파싱 끝\n");
 //        return  buffer.toString();
 //    }
-public class OpenApI extends AsyncTask<Void, Void, String>{
-        private String url;
-        public OpenApI(String url){
-            this.url = url;
-        }
 
-    @Override
-    protected String doInBackground(Void... voids) {
-
-        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder dBuilder = null;
-        try{
-            dBuilder = dbFactory.newDocumentBuilder();
-
-        }catch (ParserConfigurationException e){
-            e.printStackTrace();
-        }
-        Document doc = null;
-        try{
-            doc = dBuilder.parse(url);
-        }catch (IOException| SAXException e){
-            e.printStackTrace();
-        }
-        dbFactory.setIgnoringElementContentWhitespace(true);
-        //root tag
-        doc.getDocumentElement().normalize();
-
-        //파싱할 tag
-        NodeList nList = doc.getElementsByTagName("row id=\"0\"");
-        for (int temp = 0; temp<nList.getLength();temp++){
-            Node nNode = nList.item(temp);
-            if(nNode.getNodeType() == Node.ELEMENT_NODE){
-                Element eElement = (Element) nNode;
-
-                Log.d("오픈",getTagValue("PRDT_NM", eElement));
-            }
-        }
-        return null;
-    }
-
-    @Override
-    protected void onPostExecute(String s) {
-        super.onPostExecute(s);
-    }
-    private String getTagValue(String tag, Element eElement){
-            NodeList nList = eElement.getElementsByTagName(tag).item(0).getChildNodes();
-            Node nValue = (Node)nList.item(0);
-            if(nValue == null)
-                return null;
-            return nValue.getNodeValue();
-    }
-}
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -313,7 +262,7 @@ public class OpenApI extends AsyncTask<Void, Void, String>{
             String queryUrl = "http://openapi.foodsafetykorea.go.kr/api/".concat(key).concat("/I2570/xml/1/1/BRCD_NO=").concat(Barcodedata);
 //            OpenApI dust = new OpenApI(queryUrl);
 //            dust.execute();
-            builder.setMessage(Barcodedata);
+            builder.setMessage(queryUrl);
             builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int which) {
