@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -26,6 +28,8 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.Task;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
@@ -35,7 +39,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
+import com.journeyapps.barcodescanner.CaptureActivity;
 
 
 import java.io.File;
@@ -100,8 +104,7 @@ public class FoodActivity extends AppCompatActivity {
 
 
                 dilaog01.dismiss(); // 다이얼로그 닫기
-                rnjsgks();
-                Camera();
+                BarcodeScanner(); //바코드스캐너 열기
 
 
 
@@ -118,88 +121,48 @@ public class FoodActivity extends AppCompatActivity {
             }
         });
     }
-    public void Camera(){//카메라 실행
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if(getApplicationContext().getPackageManager().hasSystemFeature(
-                PackageManager.FEATURE_CAMERA)){
-            File photoFile = null;
-            try{
-                photoFile = createImagefile();
-            }catch (IOException e){
+//    public void Camera(){//카메라 실행
+//        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        if(getApplicationContext().getPackageManager().hasSystemFeature(
+//                PackageManager.FEATURE_CAMERA)){
+//            File photoFile = null;
+//            try{
+//                photoFile = createImagefile();
+//            }catch (IOException e){
+//
+//            }
+//
+//            if(photoFile != null){
+//                photoUri = FileProvider.getUriForFile(getApplicationContext(),getPackageName(), photoFile);
+//                intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri); //화면 전환할떄 값을 가져와줌
+//                startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
+//            }
+//        }
+//    }
 
-            }
+//    private File createImagefile() throws IOException{ //이미지 파일 생성
+//        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+//        String imageFileName = "TEST_" + timeStamp + "_";
+//        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+//        File image = File.createTempFile(
+//                imageFileName,
+//                ".jpg",
+//                storageDir
+//        );
+//        imageFilePath = image.getAbsolutePath();
+//        return image;
+//
+//    }
+//    private void rnjsgks(){//권한 체크
+//        TedPermission.with(getApplicationContext())
+//                .setPermissionListener(permissionListener)
+//                .setRationaleMessage("카메라 권한이 필요합니다.")
+//                .setDeniedMessage("거부하셨습니다.")
+//                .setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
+//                .check();
+//
+//    }
 
-            if(photoFile != null){
-                photoUri = FileProvider.getUriForFile(getApplicationContext(),getPackageName(), photoFile);
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri); //화면 전환할떄 값을 가져와줌
-                startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
-            }
-        }
-    }
-
-    private File createImagefile() throws IOException{ //이미지 파일 생성
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "TEST_" + timeStamp + "_";
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                imageFileName,
-                ".jpg",
-                storageDir
-        );
-        imageFilePath = image.getAbsolutePath();
-        return image;
-
-    }
-    private void rnjsgks(){//권한 체크
-        TedPermission.with(getApplicationContext())
-                .setPermissionListener(permissionListener)
-                .setRationaleMessage("카메라 권한이 필요합니다.")
-                .setDeniedMessage("거부하셨습니다.")
-                .setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
-                .check();
-
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bitmap bitmap = BitmapFactory.decodeFile(imageFilePath);
-            ExifInterface exif = null;
-            try{
-                exif = new ExifInterface(imageFilePath);
-            }catch (IOException e){
-                e.printStackTrace();
-            }
-            int exifOrientation;
-            int exifDegree;
-            if (exif != null){
-                exifOrientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-                exifDegree = exifOrientationToDegrees(exifOrientation);
-
-            }else{
-                exifDegree = 0;
-            }
-            //이미지뷰(findviewbyid).setImageBitmap(rotate(bitmap.exifDegree)); --> 찍은 사진 띄우고싶을때
-
-        }
-    }
-    private int exifOrientationToDegrees(int exifOrientation){
-        if(exifOrientation == ExifInterface.ORIENTATION_ROTATE_90){
-            return 90;
-        }else if(exifOrientation == ExifInterface.ORIENTATION_ROTATE_180){
-            return 180;
-        }else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_270){
-            return 270;
-        }
-        return 0;
-    }
-    private Bitmap rotate(Bitmap bitmap, float degree){ //사진 띄우고 싶을떄
-        Matrix matrix =new Matrix();
-        matrix.postRotate(degree);
-        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-
-    }
 
     PermissionListener permissionListener = new PermissionListener() { //퍼미션리스너
         @Override
@@ -213,6 +176,48 @@ public class FoodActivity extends AppCompatActivity {
 
         }
     };
+    public void BarcodeScanner(){
+        IntentIntegrator intentIntegrator = new IntentIntegrator(
+                FoodActivity.this
+        );
+
+        intentIntegrator.setPrompt("볼륨 증가 키-> Flash On");
+
+        intentIntegrator.setBeepEnabled(true);
+        intentIntegrator.setOrientationLocked(true);
+        intentIntegrator.setCaptureActivity(Capture.class);
+        intentIntegrator.initiateScan();
+
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        IntentResult intentResult = IntentIntegrator.parseActivityResult(
+                requestCode,resultCode,data
+        );
+        if (intentResult.getContents() != null){
+            //result 가 null이 아닐때
+            AlertDialog.Builder builder = new AlertDialog.Builder(
+                    FoodActivity.this
+            );
+            builder.setTitle("결과");
+            builder.setMessage(intentResult.getContents());
+            String BarcodeString = intentResult.getContents(); //바코드 번호
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int which) {
+                    //Diamiss 다이얼로그
+                    dialogInterface.dismiss();
+                }
+            });
+            builder.show();
+        }else{
+            //result content가 null일때
+            Toast.makeText(getApplicationContext(), "스캔하지 않으셨습니다.", Toast.LENGTH_SHORT).show();
+        }
+    }
 
     public void showDialog02(){ //수동으로 입력 클릭하면 나오는다이얼로그 함수
 
@@ -236,8 +241,7 @@ public class FoodActivity extends AppCompatActivity {
                 taskMap.put("count", fcount);
                 taskMap.put("place", f_detail_place);
 
-                출처: https://superwony.tistory.com/20 [개발자 키우기]
-                // 원하는 기능 구현
+
                 mDatabase.child("HomeDB").child("family1").child("Fridge").child(foodname).setValue(taskMap);
                 Log.d("확인", foodname);
 
