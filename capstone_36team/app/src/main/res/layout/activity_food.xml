@@ -9,12 +9,14 @@
     <ListView
         android:layout_width="match_parent"
         android:layout_height="400dp"
-        android:id="@+id/listview_food2"/>
+        android:id="@+id/listview_food2"
+        android:layout_weight="9"/>
 
     <Button
         android:id="@+id/btn_add_food"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:text="추가"
+        android:layout_weight="1"
         />
 </LinearLayout>
