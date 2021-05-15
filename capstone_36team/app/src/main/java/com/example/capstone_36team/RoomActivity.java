@@ -82,7 +82,7 @@ public class RoomActivity extends AppCompatActivity {
             image9.setOnTouchListener(new MyTouchListener());}
         if(image10.getY() < 1500){
 
-            image9.setOnTouchListener(new MyTouchListener());}
+            image10.setOnTouchListener(new MyTouchListener());}
 
 
 
