@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.ClipData;
 import android.content.ClipDescription;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,8 +19,11 @@ import android.widget.LinearLayout;
 
 public class RoomActivity extends AppCompatActivity {
     private ImageView image;
+    private ImageView image2;
+    private ImageView image3;
+    private ImageView image4;
     private static  final String IMAGEVIEW_TAG = "드래그 이미지";
-    private ImageView trash;
+
 
 
 
@@ -28,15 +32,57 @@ public class RoomActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_room);
-        trash = (ImageView) findViewById(R.id.trash);
+
         image = (ImageView) findViewById(R.id.image);
+        image2 = (ImageView) findViewById(R.id.image2);
+        image3 = (ImageView) findViewById(R.id.image3);
+        image4 = (ImageView) findViewById(R.id.image4);
+        ImageView image5 = (ImageView) findViewById(R.id.image5);
+        ImageView image6 = (ImageView) findViewById(R.id.image6);
+        ImageView image7 = (ImageView) findViewById(R.id.image7);
+        ImageView image8 = (ImageView) findViewById(R.id.image8);
+        ImageView image9 = (ImageView) findViewById(R.id.image9);
+        ImageView image10 = (ImageView) findViewById(R.id.image10);
+
+
+
 
 
         MyTouchListener myTouchListener = new MyTouchListener();
 
 
 
-        image.setOnTouchListener(new MyTouchListener()); //가구 이미지 mytouchlistner에 연결
+        if(image.getY() < 1500){
+
+            image.setOnTouchListener(new MyTouchListener());} //가구 이미지 mytouchlistner에 연결
+
+        if(image2.getY() < 1500){
+
+            image2.setOnTouchListener(new MyTouchListener());}
+        if(image3.getY() < 1500){
+
+            image3.setOnTouchListener(new MyTouchListener());}
+        if(image4.getY() < 1500){
+
+            image4.setOnTouchListener(new MyTouchListener());}
+        if(image5.getY() < 1500){
+
+            image5.setOnTouchListener(new MyTouchListener());}
+        if(image6.getY() < 1500){
+
+            image6.setOnTouchListener(new MyTouchListener());}
+        if(image7.getY() < 1500){
+
+            image7.setOnTouchListener(new MyTouchListener());}
+        if(image8.getY() < 1500){
+
+            image8.setOnTouchListener(new MyTouchListener());}
+        if(image9.getY() < 1500){
+
+            image9.setOnTouchListener(new MyTouchListener());}
+        if(image10.getY() < 1500){
+
+            image9.setOnTouchListener(new MyTouchListener());}
 
 
 
@@ -54,6 +100,7 @@ public class RoomActivity extends AppCompatActivity {
             int parentHeight = ((ViewGroup)v.getParent()).getHeight();
 
 
+
             if(motionEvent.getAction() == MotionEvent.ACTION_DOWN){
                 // 뷰 누름
                 oldXvalue = (int) motionEvent.getX();
@@ -66,6 +113,7 @@ public class RoomActivity extends AppCompatActivity {
 
                 Log.d("viewTest", "oldXvalue : "+ oldXvalue + " oldYvalue : " + oldYvalue);    // View 내부에서 터치한 지점의 상대 좌표값.
                 Log.d("viewTest", "v.getX() : "+v.getX());    // View 의 좌측 상단이 되는 지점의 절대 좌표값.
+                Log.d("viewTest", "v.getY() : "+v.getY());
                 Log.d("viewTest", "RawX : " + motionEvent.getRawX() +" RawY : " + motionEvent.getRawY());    // View 를 터치한 지점의 절대 좌표값.
                 Log.d("viewTest", "v.getHeight : " + v.getHeight() + " v.getWidth : " + v.getWidth());    // View 의 Width, Height
 
@@ -93,9 +141,35 @@ public class RoomActivity extends AppCompatActivity {
                     v.setY(startYvalue);
 
                 }
+                else{
+                    v.setOnTouchListener(null);
+                    //// --> DB에 스티커 위치 등록
+                    //// v.getY() 와 v.getX()로 절대좌표 얻을 수 있음
+                    v.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            Intent intent = new Intent(getApplicationContext(), FurnitureActivity.class);
+                            startActivity(intent);
+                            Log.d("확인 ", "클릭됨");
+
+                        }
+                    });
+                    v.setOnLongClickListener(new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View v) {
+                            Log.d("확인", "긴 클릭 됨");
+                            v.setOnClickListener(null);
+                            v.setOnTouchListener(new MyTouchListener());
+
+                            return false;
+                        }
+                    });
+                }
 
 
             }
+
             return true;
         }
     }
