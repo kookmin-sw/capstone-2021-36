@@ -25,13 +25,16 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.ChildEventListener;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.gun0912.tedpermission.PermissionListener;
@@ -85,11 +88,13 @@ public class FoodActivity extends AppCompatActivity {
     String data;
     Button dateset;
     DatePickerDialog datePickerDialog;
+    private ListView flist;
+    private String family_name = "family1";
 
 
 
     DatabaseReference mDatabase= FirebaseDatabase.getInstance().getReference();
-    //DatabaseReference conditionRef = mDatabase.child("text");
+    DatabaseReference conditionRef = mDatabase.child("HomeDB").child(family_name).child("Fridge");
 //    String userId = "user1";
 //    String FamilyName = mDatabase.child("UserDB").child(userId).get();
 
@@ -97,6 +102,7 @@ public class FoodActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_food);
+        ListView flist = (ListView)findViewById(R.id.listview_food2);
 
         btn_add_food = (Button)findViewById(R.id.btn_add_food);
         dilaog01 = new Dialog(FoodActivity.this);       // Dialog 초기화
@@ -106,7 +112,59 @@ public class FoodActivity extends AppCompatActivity {
         dialog02.requestWindowFeature(Window.FEATURE_NO_TITLE); // 타이틀 제거
         dialog02.setContentView(R.layout.plus_dialog_layout);
 
+//        ArrayList<ItemData> fData = new ArrayList<>();
+//        ItemData fItem = new ItemData();
+//        for (int i=0; i<strDate.length ; ++i)
+//        {
+//            ItemData fItem = new ItemData();
+//            fItem.strTitle = "데이터 " + (i+1); //strTitle -> 물품 이름
+//            fItem.strDate = strDate[nDatCnt++];
+//            fData.add(fItem);
+//            if (nDatCnt >= strDate.length) nDatCnt = 0;
+//        }
 
+// ListView, Adapter 생성 및 연결 ------------------------
+
+        // ListAdapter fAdapter = new ListAdapter(fData);
+        //flist.setAdapter(fAdapter);
+
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1);
+        flist.setAdapter(adapter);
+
+
+
+        conditionRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+                adapter.add(dataSnapshot.getKey());
+                //Log.d("MainActivity", "ChildEventListener - onChildAdded : " + dataSnapshot + dataSnapshot.getKey());
+//                fItem.strTitle =  "t";//dataSnapshot.getKey(); //strTitle -> 물품 이름
+//                fItem.strDate =  "1";//dataSnapshot.child("count").getValue(String.class);
+//                fData.add(fItem);
+                Log.d("MainActivity", "ChildEventListener - onChildChanged : ");
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                Log.d("MainActivity", "ChildEventListener - onChildChanged : " + dataSnapshot);
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                Log.d("MainActivity", "ChildEventListener - onChildRemoved : " + dataSnapshot.getKey());
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                Log.d("MainActivity", "ChildEventListener - onChildMoved" + s);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.d("MainActivity", "ChildEventListener - onCancelled" + databaseError.getMessage());
+            }
+        });
 
 
         btn_add_food.setOnClickListener(new View.OnClickListener() {
@@ -351,7 +409,7 @@ public class FoodActivity extends AppCompatActivity {
                 taskMap.put("place", f_detail_place);
 
 
-                mDatabase.child("HomeDB").child("family1").child("Fridge").child(foodname).setValue(taskMap);
+                mDatabase.child("HomeDB").child(family_name).child("Fridge").child(foodname).setValue(taskMap);
                 Log.d("확인", foodname);
 
 
