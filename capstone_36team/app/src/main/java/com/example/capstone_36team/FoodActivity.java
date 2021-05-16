@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -24,6 +26,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -61,6 +64,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -79,6 +83,9 @@ public class FoodActivity extends AppCompatActivity {
     String key = "593cd6a3496d4e1194ff";
     String Barcodedata ;
     String data;
+    Button dateset;
+    DatePickerDialog datePickerDialog;
+
 
 
     DatabaseReference mDatabase= FirebaseDatabase.getInstance().getReference();
@@ -102,7 +109,6 @@ public class FoodActivity extends AppCompatActivity {
 
 
 
-
         btn_add_food.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -110,6 +116,18 @@ public class FoodActivity extends AppCompatActivity {
             }
         });
     }
+
+    private String getTodaysDate() {
+        Calendar ca1 = Calendar.getInstance();
+        int year = ca1.get(Calendar.YEAR);
+        int month = ca1.get(Calendar.MONTH);
+        int day = ca1.get(Calendar.DAY_OF_MONTH);
+        month = month +1;
+        return  makeDateString(day, month, year);
+
+
+    }
+
     public void showDialog01(){ //다이얼로그 함수
         dilaog01.show(); // 다이얼로그 띄우기
 
@@ -276,11 +294,42 @@ public class FoodActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "스캔하지 않으셨습니다.", Toast.LENGTH_SHORT).show();
         }
     }
+    private void initDatePicker(){
+        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int day) {
+                month = month +1;
+                String date = makeDateString(day, month, year);
+                dateset.setText(date);
+            }
+        };
+        Calendar ca1 = Calendar.getInstance();
+        int year = ca1.get(Calendar.YEAR);
+        int month = ca1.get(Calendar.MONTH);
+        int day = ca1.get(Calendar.DAY_OF_MONTH);
+        int style = AlertDialog.THEME_HOLO_LIGHT;
+        datePickerDialog = new DatePickerDialog(this, style, dateSetListener, year, month, day);
+
+    }
+    private String makeDateString(int day,int month, int year ){
+        Log.d("날짜확인", year+ "년"+month+"월" + day + "일" );
+        return year+ "년" + month+"월"+ day +"일"; ///////////////////////////////////// 유통기한 등록장소
+
+    }
+
+    public void openDatePicker(View view){
+        datePickerDialog.show();
+
+    }
 
     public void showDialog02(){ //수동으로 입력 클릭하면 나오는다이얼로그 함수
+        Button plus_button = dialog02.findViewById(R.id.plus_button);
+        initDatePicker();
+        dateset = (Button)dialog02.findViewById(R.id.dateset);
+        dateset.setText(getTodaysDate());
 
         dialog02.show(); // 다이얼로그 띄우기
-        Button plus_button = dialog02.findViewById(R.id.plus_button);
+
 
         plus_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -289,6 +338,8 @@ public class FoodActivity extends AppCompatActivity {
                 EditText fnameinput = (EditText)dialog02.findViewById(R.id.fnameInput);
                 EditText fposinput = (EditText)dialog02.findViewById(R.id.fposInput);
                 EditText fcountinput = (EditText)dialog02.findViewById(R.id.fcountInput);
+
+
 
 
                 String foodname = fnameinput.getText().toString();
