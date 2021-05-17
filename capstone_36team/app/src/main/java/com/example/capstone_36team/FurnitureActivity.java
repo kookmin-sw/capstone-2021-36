@@ -10,6 +10,10 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.gun0912.tedpermission.PermissionListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,6 +23,7 @@ public class FurnitureActivity extends AppCompatActivity {
     private Dialog dilaog01;
     private ListView listView_item;
     private Button btn_add_item;
+
     private Button modify;
     private Dialog dialog02;
 
@@ -31,9 +36,9 @@ public class FurnitureActivity extends AppCompatActivity {
         dilaog01.setContentView(R.layout.barcodeorcustom);
         listView_item = (ListView) findViewById(R.id.listview_item);
         btn_add_item = (Button) findViewById(R.id.btn_add_item);
-        Dialog dialog02 = new Dialog(FurnitureActivity.this);       // Dialog 초기화
+        dialog02 = new Dialog(FurnitureActivity.this);       // Dialog 초기화
         dialog02.requestWindowFeature(Window.FEATURE_NO_TITLE); // 타이틀 제거
-        dialog02.setContentView(R.layout.plus_dialog_layout);
+        dialog02.setContentView(R.layout.plus_dialog_layout_nofood);
 
 
         ///////추가버튼////////
@@ -75,6 +80,8 @@ public class FurnitureActivity extends AppCompatActivity {
             public void onClick(View view) { //바코드로 등록 클릭했을때
                 Log.d("확인", "바코드로 등록 클릭됨");
                 // 원하는 기능 구현
+                dilaog01.dismiss(); // 다이얼로그 닫기
+                BarcodeScanner(); //바코드 스캐너 실행
 
 
 
@@ -86,7 +93,68 @@ public class FurnitureActivity extends AppCompatActivity {
             public void onClick(View view) { //수동으로 등록 클릭했을때
                 Log.d("확인", "수동으로 등록 클릭됨");
                 // 원하는 기능 구현
+                showDialog02();
 
+
+            }
+        });
+    }
+    PermissionListener permissionListener = new PermissionListener() { //퍼미션리스너
+        @Override
+        public void onPermissionGranted() {
+            Toast.makeText(getApplicationContext(), "권한이 허용됨", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onPermissionDenied(ArrayList<String> deniedPermissions) {
+            Toast.makeText(getApplicationContext(), "권한이 거부됨", Toast.LENGTH_SHORT).show();
+
+        }
+    };
+    public void BarcodeScanner(){
+        IntentIntegrator intentIntegrator = new IntentIntegrator(
+                FurnitureActivity.this
+        );
+
+        intentIntegrator.setPrompt("볼륨 증가 키-> Flash On");
+
+        intentIntegrator.setBeepEnabled(true);
+        intentIntegrator.setOrientationLocked(true);
+        intentIntegrator.setCaptureActivity(Capture.class);
+        intentIntegrator.initiateScan();
+
+    }
+    public void showDialog02(){ //수동으로 입력 클릭하면 나오는다이얼로그 함수
+
+
+
+
+        dialog02.show(); // 다이얼로그 띄우기
+
+        Button plus_button = dialog02.findViewById(R.id.plus_button2);
+        plus_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) { //등록
+
+                ///////foodActivity에서의 물품추가 dialog와 다른 layout 파일(plus_dialog_layout_nofood.xml) 사용했어요!!!!!@@@@@@@
+                ////유통기한이 없어요/////
+                //////여기서 EditText에 써진 DB추가 필요해요/////////////
+
+
+                dialog02.dismiss(); // 다이얼로그 닫기
+
+
+
+
+            }
+        });
+        Button no_plus_button = dialog02.findViewById(R.id.no_plus_button2);
+        no_plus_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) { //취소
+                Log.d("확인", "취소 클릭됨");
+                // 원하는 기능 구현
+                dialog02.dismiss();
             }
         });
     }

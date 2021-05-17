@@ -1,20 +1,33 @@
 package com.example.capstone_36team;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
 import android.content.ClipData;
 import android.content.ClipDescription;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.Editable;
 import android.util.Log;
 import android.view.DragEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 
 
 public class RoomActivity extends AppCompatActivity {
@@ -22,7 +35,12 @@ public class RoomActivity extends AppCompatActivity {
     private ImageView image2;
     private ImageView image3;
     private ImageView image4;
+    private Dialog dialog03;
+    private Dialog dialog04;
     private static  final String IMAGEVIEW_TAG = "드래그 이미지";
+    private String family_name = "family1";
+    DatabaseReference mDatabase= FirebaseDatabase.getInstance().getReference();
+    DatabaseReference conditionRef = mDatabase.child("HomeDB").child(family_name).child("room1");
 
 
 
@@ -43,6 +61,13 @@ public class RoomActivity extends AppCompatActivity {
         ImageView image8 = (ImageView) findViewById(R.id.image8);
         ImageView image9 = (ImageView) findViewById(R.id.image9);
         ImageView image10 = (ImageView) findViewById(R.id.image10);
+        dialog03 = new Dialog(RoomActivity.this);       // Dialog 초기화
+        dialog03.requestWindowFeature(Window.FEATURE_NO_TITLE); // 타이틀 제거
+        dialog03.setContentView(R.layout.search_dialog);
+        dialog04 = new Dialog(RoomActivity.this);       // Dialog 초기화
+        dialog04.requestWindowFeature(Window.FEATURE_NO_TITLE); // 타이틀 제거
+        dialog04.setContentView(R.layout.search_result);
+
 
 
 
@@ -211,6 +236,90 @@ public class RoomActivity extends AppCompatActivity {
             return true;
         }
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) { //메뉴바 관련 함수(검색)
+        getMenuInflater().inflate(R.menu.actionbar_actions, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_search:
+                showDialog03();
+
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+    }
+
+    public void showDialog03(){ //다이얼로그 함수(검색)
+        dialog03.show(); // 다이얼로그 띄우기
+        EditText edittext_searchname = dialog03.findViewById(R.id.edittext_searchname);
+
+
+
+        Button searchbutton = dialog03.findViewById(R.id.pbutton);
+
+        // *주의할 점: findViewById()를 쓸 때는 -> 앞에 반드시 다이얼로그 이름을 붙여야 한다.
+
+
+
+        searchbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) { //검색 클릭했을때
+                Log.d("확인", "검색클릭됨");
+                Log.d("확인", "검색클릭됨");
+                // 원하는 기능 구현
+                ///////////////////////검색기능////////////////////
+                Editable search = edittext_searchname.getText();
+                //////////edittext에 입력한 문자의 경로를 query에 담습니다.//////
+                Query query = conditionRef.child(String.valueOf(search));
+
+                String stringquery = String.valueOf(query);
+                stringquery.replace("/%EB%AC%BC%ED%92%88%20%EC%9D%B4%EB%A6%84\n","");
+
+                StringBuffer stringBufferquery = new StringBuffer(stringquery);
+
+                stringBufferquery.replace(0,58,"");
+                stringquery = String.valueOf(stringBufferquery);
+
+                TextView text_search_result = dialog04.findViewById(R.id.text_search_result);
+                Button btn_search_result = dialog04.findViewById(R.id.btn_search_result);
+                text_search_result.setText(stringquery);
+                text_search_result.setTextSize(20);
+                dialog03.dismiss();
+                dialog04.show();
+                btn_search_result.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog04.dismiss();
+                    }
+                });
+
+
+
+
+
+            }
+        });
+        Button nosearchbutton = dialog03.findViewById(R.id.nbutton);
+        nosearchbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) { //취소 클릭했을때
+                Log.d("확인", "취소릭됨");
+                // 원하는 기능 구현
+                dialog03.dismiss();
+
+            }
+        });
+    }
+
+
+
+
 
 
 }
