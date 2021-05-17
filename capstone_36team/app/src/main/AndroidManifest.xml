@@ -23,6 +23,7 @@
         android:usesCleartextTraffic="true">
         <activity android:name=".FurnitureActivity"></activity>
         <activity android:name=".FoodActivity" />
+
         <activity
             android:name=".Capture"
             android:screenOrientation="portrait"
@@ -38,6 +39,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver android:name=".AlarmRecevier"
+            android:enabled="true"
+            android:exported="false">
+        </receiver>
 
         <provider
             android:name="androidx.core.content.FileProvider"
