@@ -8,14 +8,19 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class FurnitureActivity extends AppCompatActivity {
     private Dialog dilaog01;
     private ListView listView_item;
     private Button btn_add_item;
+    private Button modify;
+    private Dialog dialog02;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +31,11 @@ public class FurnitureActivity extends AppCompatActivity {
         dilaog01.setContentView(R.layout.barcodeorcustom);
         listView_item = (ListView) findViewById(R.id.listview_item);
         btn_add_item = (Button) findViewById(R.id.btn_add_item);
+        Dialog dialog02 = new Dialog(FurnitureActivity.this);       // Dialog 초기화
+        dialog02.requestWindowFeature(Window.FEATURE_NO_TITLE); // 타이틀 제거
+        dialog02.setContentView(R.layout.plus_dialog_layout);
+
+
         ///////추가버튼////////
         btn_add_item.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,4 +90,6 @@ public class FurnitureActivity extends AppCompatActivity {
             }
         });
     }
+
+
 }

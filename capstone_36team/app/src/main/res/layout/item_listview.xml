@@ -38,6 +38,7 @@
         android:layout_height="match_parent"
         android:text="수정"
         android:layout_weight="20"
+        android:id="@+id/modify"
         />
     <View
         android:layout_width="0dp"
