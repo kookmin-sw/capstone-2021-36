@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textPersonName"
-            android:hint="물품 이름" />
+            android:hint="이름" />
 
     </LinearLayout>
 
