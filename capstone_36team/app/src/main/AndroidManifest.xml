@@ -21,7 +21,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Capstone_36team"
         android:usesCleartextTraffic="true">
-        <activity android:name=".FurnitureActivity"></activity>
+        <activity android:name=".IntroActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".FurnitureActivity" />
         <activity android:name=".FoodActivity" />
 
         <activity
@@ -33,11 +40,6 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <receiver android:name=".AlarmRecevier"
