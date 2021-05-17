@@ -59,7 +59,7 @@
         app:layout_constraintVertical_bias="0.216" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btn_modify_yes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="84dp"
@@ -71,7 +71,7 @@
         app:layout_constraintVertical_bias="0.044" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/btn_modify_no"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="123dp"
@@ -79,7 +79,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
-        app:layout_constraintStart_toEndOf="@+id/button"
+        app:layout_constraintStart_toEndOf="@+id/btn_modify_yes"
         app:layout_constraintTop_toBottomOf="@+id/editTextModifycount"
         app:layout_constraintVertical_bias="0.0" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,6 +2,7 @@ package com.example.capstone_36team;
 
 import android.Manifest;
 import android.os.Bundle;
+import android.view.Menu;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.gun0912.tedpermission.TedPermission;
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
 
 
 
