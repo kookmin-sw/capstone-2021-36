@@ -2,13 +2,18 @@ package com.example.capstone_36team;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 import androidx.core.content.FileProvider;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -65,10 +70,12 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -83,14 +90,23 @@ public class FoodActivity extends AppCompatActivity {
     private static final int REQUEST_IMAGE_CAPTURE = 672;
     private String imageFilePath;
     private Uri photoUri;
+    private AlarmManager alarmManager;
+    private GregorianCalendar mCalender;
+    private NotificationManager notificationManager;
+    NotificationCompat.Builder builder;
+
     String key = "593cd6a3496d4e1194ff";
     String Barcodedata ;
     String data;
     Button dateset;
     DatePickerDialog datePickerDialog;
+<<<<<<< HEAD
+    String date;
+=======
     private ListView flist;
     private String family_name = "family1";
 
+>>>>>>> dc1d3987eba6e9224013c4a12e60620e4cf2934e
 
 
     DatabaseReference mDatabase= FirebaseDatabase.getInstance().getReference();
@@ -111,6 +127,10 @@ public class FoodActivity extends AppCompatActivity {
         dialog02 = new Dialog(FoodActivity.this);       // Dialog 초기화
         dialog02.requestWindowFeature(Window.FEATURE_NO_TITLE); // 타이틀 제거
         dialog02.setContentView(R.layout.plus_dialog_layout);
+        notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE); // 하추
+        alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE); // 하추
+        mCalender = new GregorianCalendar(); // 하추
+        Log.v("HelloAlarmActivity", mCalender.getTime().toString()); // 하추
 
 //        ArrayList<ItemData> fData = new ArrayList<>();
 //        ItemData fItem = new ItemData();
@@ -367,12 +387,11 @@ public class FoodActivity extends AppCompatActivity {
         int day = ca1.get(Calendar.DAY_OF_MONTH);
         int style = AlertDialog.THEME_HOLO_LIGHT;
         datePickerDialog = new DatePickerDialog(this, style, dateSetListener, year, month, day);
-
     }
     private String makeDateString(int day,int month, int year ){
         Log.d("날짜확인", year+ "년"+month+"월" + day + "일" );
+        date = year + "-" + month + "-" + day;
         return year+ "년" + month+"월"+ day +"일"; ///////////////////////////////////// 유통기한 등록장소
-
     }
 
     public void openDatePicker(View view){
@@ -407,6 +426,7 @@ public class FoodActivity extends AppCompatActivity {
                 taskMap.put("name", foodname);
                 taskMap.put("count", fcount);
                 taskMap.put("place", f_detail_place);
+                setAlarm();
 
 
                 mDatabase.child("HomeDB").child(family_name).child("Fridge").child(foodname).setValue(taskMap);
@@ -429,6 +449,31 @@ public class FoodActivity extends AppCompatActivity {
                 dialog02.dismiss();
             }
         });
+    }
+
+    private void setAlarm() {
+        //AlarmReceiver에 값 전달
+        Intent receiverIntent = new Intent(FoodActivity.this, AlarmRecevier.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(FoodActivity.this, 0, receiverIntent, 0);
+
+        String from = date + " 00:00:00";
+        //String from = "2021-05-17 03:37:00"; //임의로 날짜와 시간을 지정
+
+        //날짜 포맷을 바꿔주는 소스코드
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date datetime = null;
+        try {
+            datetime = dateFormat.parse(from);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(datetime);
+
+        alarmManager.set(AlarmManager.RTC, calendar.getTimeInMillis(),pendingIntent);
+
+
     }
 
 
