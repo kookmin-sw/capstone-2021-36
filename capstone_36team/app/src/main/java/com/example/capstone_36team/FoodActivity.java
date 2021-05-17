@@ -100,13 +100,13 @@ public class FoodActivity extends AppCompatActivity {
     String data;
     Button dateset;
     DatePickerDialog datePickerDialog;
-<<<<<<< HEAD
+
     String date;
-=======
+
     private ListView flist;
     private String family_name = "family1";
 
->>>>>>> dc1d3987eba6e9224013c4a12e60620e4cf2934e
+
 
 
     DatabaseReference mDatabase= FirebaseDatabase.getInstance().getReference();
