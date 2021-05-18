@@ -63,6 +63,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.journeyapps.barcodescanner.CaptureActivity;
 
 
+import org.jetbrains.annotations.NotNull;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -115,13 +116,16 @@ public class FoodActivity extends AppCompatActivity {
     String date;
 
     private ListView flist;
-    private String family_name = "family1";
+    private String user_name = "testuid";
+
 
 
 
 
     DatabaseReference mDatabase= FirebaseDatabase.getInstance().getReference();
-    DatabaseReference conditionRef = mDatabase.child("HomeDB").child(family_name).child("Fridge");
+    DatabaseReference userRef = mDatabase.child("UserDB").child(user_name);
+    DatabaseReference conditionRef; //= mDatabase.child("HomeDB").child(family_name).child("Fridge");
+
 //    String userId = "user1";
 //    String FamilyName = mDatabase.child("UserDB").child(userId).get();
 
@@ -171,6 +175,36 @@ public class FoodActivity extends AppCompatActivity {
 
 
 
+        userRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
+                //adapter.add(snapshot.getValue(String.class));
+                conditionRef = mDatabase.child("HomeDB").child(snapshot.getValue(String.class)).child("Fridge");
+                adapter.clear();
+                mkChildEventListener(adapter);
+
+            }
+
+            @Override
+            public void onChildChanged(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
+                conditionRef = mDatabase.child("HomeDB").child(snapshot.getValue(String.class)).child("Fridge");
+                adapter.clear();
+                mkChildEventListener(adapter);
+//                adapter.clear();
+//                conditionRef = mDatabase.child("HomeDB").child(snapshot.getValue(String.class)).child("Fridge");
+            }
+        });
+
+
+        btn_add_food.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDialog01();
+            }
+        });
+    }
+
+    public void mkChildEventListener(ArrayAdapter<String> adapter){
         conditionRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -201,14 +235,6 @@ public class FoodActivity extends AppCompatActivity {
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Log.d("MainActivity", "ChildEventListener - onCancelled" + databaseError.getMessage());
-            }
-        });
-
-
-        btn_add_food.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDialog01();
             }
         });
     }
@@ -447,7 +473,8 @@ public class FoodActivity extends AppCompatActivity {
                 setAlarm();
 
 
-                mDatabase.child("HomeDB").child(family_name).child("Fridge").child(foodname).setValue(taskMap);
+                conditionRef.child(foodname).setValue(taskMap);
+                //conditionRef = mDatabase.child("HomeDB").child("family2").child("Fridge");
                 Log.d("확인", foodname);
 
 

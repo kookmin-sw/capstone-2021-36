@@ -20,13 +20,21 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.capstone_36team.R;
 import com.example.capstone_36team.RoomActivity;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class NotificationsFragment extends Fragment {
     private Button btn_partin;
 
     private NotificationsViewModel notificationsViewModel;
     private Dialog dialog03;
+    private String uid = "testuid";
+    DatabaseReference mDatabase= FirebaseDatabase.getInstance().getReference();
+    DatabaseReference conditionRef = mDatabase.child("UserDB").child(uid);
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -58,7 +66,7 @@ public class NotificationsFragment extends Fragment {
         Button searchbutton = dialog03.findViewById(R.id.pbutton);
         searchbutton.setText("참여");
         dialog03.show(); // 다이얼로그 띄우기
-        EditText edittext_searchname = dialog03.findViewById(R.id.edittext_searchname);
+        EditText edittext_searchname = (EditText) dialog03.findViewById(R.id.edittext_searchname);
 
         // *주의할 점: findViewById()를 쓸 때는 -> 앞에 반드시 다이얼로그 이름을 붙여야 한다.
 
@@ -68,6 +76,11 @@ public class NotificationsFragment extends Fragment {
             @Override
             public void onClick(View view) { //검색 클릭했을때
                 ///////edittext_searchname에 텍스트 입력됨//////
+                Log.d("확인", "가족변경 " + edittext_searchname);
+                Map<String, Object> familyUpdates = new HashMap<>();
+                familyUpdates.put("family", edittext_searchname.getText().toString());
+
+                conditionRef.updateChildren(familyUpdates);
                 dialog03.dismiss();
             }
         });
