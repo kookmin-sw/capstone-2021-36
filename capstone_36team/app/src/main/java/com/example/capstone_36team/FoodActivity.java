@@ -67,6 +67,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -76,6 +77,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.StringWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -91,6 +93,12 @@ import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 public class FoodActivity extends AppCompatActivity {
     private Button btn_add_food;
@@ -130,6 +138,9 @@ public class FoodActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_food);
         ListView flist = (ListView)findViewById(R.id.listview_food2);
+
+
+
 
         btn_add_food = (Button)findViewById(R.id.btn_add_food);
         dilaog01 = new Dialog(FoodActivity.this);       // Dialog 초기화
@@ -325,11 +336,11 @@ public class FoodActivity extends AppCompatActivity {
         intentIntegrator.initiateScan();
 
     }
-//    public String getXmlData(){
-//        StringBuffer buffer = new StringBuffer();
-//        String location = URLEncoder.encode(Barcodedata);
-//        String queryUrl = "http://openapi.foodsafetykorea.go.kr/api/"+key+"/I2570/xml/1/5/BRCD_NO="+Barcodedata;
-//        try{
+    public String getXmlData(String s){
+        StringBuffer buffer = new StringBuffer();
+
+//        String queryUrl = "https://openapi.foodsafetykorea.go.kr/api/593cd6a3496d4e1194ff/I2570/xml/1/5/BRCD_NO=8809360172547";
+        try{
 //            URL url = new URL(queryUrl); //문자열로 된 요청 url을 URL객체로 생성
 //            InputStream is = url.openStream();
 //
@@ -343,18 +354,71 @@ public class FoodActivity extends AppCompatActivity {
 //            int eventType = xpp.getEventType();
 //            Log.d("확인", String.valueOf(eventType));
 //            xpp.next();
+
+
+
+            URL url = new URL(s);
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            Document doc = db.parse(new InputSource(url.openStream()));
+            doc.getDocumentElement().normalize();
+
+
+
+//            NodeList nodeList = doc.getElementsByTagName("I2570");
+//            Element el = (Element) nodeList.item(1);
+            doc.getDocumentElement().normalize();
+            Log.d("확인", doc.getDocumentElement().getNodeName());
+            NodeList nodeList = doc.getElementsByTagName("row");
+            Log.d("리스트수", String.valueOf(nodeList.getLength()));
+            for (int temp = 0; temp<nodeList.getLength(); temp++){
+                Node nNode = nodeList.item(temp);
+                if (nNode.getNodeType() == Node.ELEMENT_NODE){
+                    Element eElement = (Element) nNode;
+                    Log.d("제발", "상품이름 " + getTagValue("PRDT_NM", eElement));
+                    Log.d("제발", "제조사" + getTagValue("CMPNY_NM", eElement));
+                    return getTagValue("PRDT_NM", eElement) + "/" + getTagValue("CMPNY_NM", eElement);
+
+                }
+            }
+
+
+//            Log.d("안녕", String.valueOf(e1));
+
+            /** Assign textview array lenght by arraylist size */
+//            TextView name = new TextView[nodeList.getLength()];
+//            website = new TextView[nodeList.getLength()];
+//            category = new TextView[nodeList.getLength()];
 //
+//            for (int i = 0; i < nodeList.getLength(); i++) {
 //
-//        } catch (MalformedURLException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } catch (XmlPullParserException e) {
-//            e.printStackTrace();
-//        }
-//        buffer.append("파싱 끝\n");
-//        return  buffer.toString();
-//    }
+//                Node node = nodeList.item(i);
+//
+//                name[i] = new TextView(this);
+//                website[i] = new TextView(this);
+//            }
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        } catch (SAXException e) {
+            e.printStackTrace();
+        }
+        buffer.append("파싱 끝\n");
+        return  buffer.toString();
+    }
+    private String getTagValue(String tag, Element eElement){ //바코드 인식 관련
+        NodeList nlList = eElement.getElementsByTagName(tag).item(0).getChildNodes();
+        Node nValue = (Node)nlList.item(0);
+        if(nValue == null)
+            return null;
+        return nValue.getNodeValue();
+    }
+
 
 
     @Override
@@ -364,6 +428,7 @@ public class FoodActivity extends AppCompatActivity {
                 requestCode,resultCode,data
         );
         if (intentResult.getContents() != null){
+            final String[] result = new String[1];
             //result 가 null이 아닐때
             AlertDialog.Builder builder = new AlertDialog.Builder(
                     FoodActivity.this
@@ -373,10 +438,26 @@ public class FoodActivity extends AppCompatActivity {
             Barcodedata = intentResult.getContents(); //바코드 번호
 //            getXmlData();
 
-            String queryUrl = "http://openapi.foodsafetykorea.go.kr/api/".concat(key).concat("/I2570/xml/1/1/BRCD_NO=").concat(Barcodedata);
+//
+            String queryUrl = "https://openapi.foodsafetykorea.go.kr/api/".concat(key).concat("/I2570/xml/1/1/BRCD_NO=").concat(Barcodedata);
+            Thread thread = new Thread(new Runnable() {
+
+                @Override
+                public void run() {
+                    try  {
+                        result[0] = getXmlData(queryUrl);
+                        //Your code goes here
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            thread.start();
 //            OpenApI dust = new OpenApI(queryUrl);
 //            dust.execute();
-            builder.setMessage(queryUrl);
+//            getXmlData(queryUrl);
+            builder.setMessage(result[0]);
             builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int which) {
