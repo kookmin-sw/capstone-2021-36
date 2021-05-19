@@ -106,13 +106,18 @@ public class FoodActivity extends AppCompatActivity {
     private Dialog dialog02;
     private Dialog dialog03;
     private Dialog dialog04;
+    private Dialog dialog05;
+    String name;
+    String company;
     private static final int REQUEST_IMAGE_CAPTURE = 672;
     private String imageFilePath;
     private Uri photoUri;
     private AlarmManager alarmManager;
     private GregorianCalendar mCalender;
     private NotificationManager notificationManager;
-    NotificationCompat.Builder builder;
+    String barcoderesult1;
+    String result1;
+    AlertDialog.Builder builder;
 
     String key = "593cd6a3496d4e1194ff";
     String Barcodedata ;
@@ -155,6 +160,9 @@ public class FoodActivity extends AppCompatActivity {
         dialog04 = new Dialog(FoodActivity.this);       // Dialog 초기화
         dialog04.requestWindowFeature(Window.FEATURE_NO_TITLE); // 타이틀 제거
         dialog04.setContentView(R.layout.search_result);
+        dialog05 = new Dialog(FoodActivity.this);       // Dialog 초기화
+        dialog05.requestWindowFeature(Window.FEATURE_NO_TITLE); // 타이틀 제거
+        dialog05.setContentView(R.layout.plus_dialog_layout);
 
         notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE); // 하추
         alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE); // 하추
@@ -341,19 +349,6 @@ public class FoodActivity extends AppCompatActivity {
 
 //        String queryUrl = "https://openapi.foodsafetykorea.go.kr/api/593cd6a3496d4e1194ff/I2570/xml/1/5/BRCD_NO=8809360172547";
         try{
-//            URL url = new URL(queryUrl); //문자열로 된 요청 url을 URL객체로 생성
-//            InputStream is = url.openStream();
-//
-//            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-//            XmlPullParser xpp = factory.newPullParser();
-//            xpp.setInput(new InputStreamReader(is, "UTF-8"));
-//
-//            String tag;
-//
-//
-//            int eventType = xpp.getEventType();
-//            Log.d("확인", String.valueOf(eventType));
-//            xpp.next();
 
 
 
@@ -363,10 +358,6 @@ public class FoodActivity extends AppCompatActivity {
             Document doc = db.parse(new InputSource(url.openStream()));
             doc.getDocumentElement().normalize();
 
-
-
-//            NodeList nodeList = doc.getElementsByTagName("I2570");
-//            Element el = (Element) nodeList.item(1);
             doc.getDocumentElement().normalize();
             Log.d("확인", doc.getDocumentElement().getNodeName());
             NodeList nodeList = doc.getElementsByTagName("row");
@@ -377,26 +368,16 @@ public class FoodActivity extends AppCompatActivity {
                     Element eElement = (Element) nNode;
                     Log.d("제발", "상품이름 " + getTagValue("PRDT_NM", eElement));
                     Log.d("제발", "제조사" + getTagValue("CMPNY_NM", eElement));
-                    return getTagValue("PRDT_NM", eElement) + "/" + getTagValue("CMPNY_NM", eElement);
+                    name = getTagValue("PRDT_NM", eElement); //여기서의 name과 company는 잘 출력돼요
+                    company = getTagValue("CMPNY_NM", eElement);
+                    return name+company;
+
+
 
                 }
             }
 
 
-//            Log.d("안녕", String.valueOf(e1));
-
-            /** Assign textview array lenght by arraylist size */
-//            TextView name = new TextView[nodeList.getLength()];
-//            website = new TextView[nodeList.getLength()];
-//            category = new TextView[nodeList.getLength()];
-//
-//            for (int i = 0; i < nodeList.getLength(); i++) {
-//
-//                Node node = nodeList.item(i);
-//
-//                name[i] = new TextView(this);
-//                website[i] = new TextView(this);
-//            }
 
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -409,7 +390,7 @@ public class FoodActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         buffer.append("파싱 끝\n");
-        return  buffer.toString();
+        return "망했어";
     }
     private String getTagValue(String tag, Element eElement){ //바코드 인식 관련
         NodeList nlList = eElement.getElementsByTagName(tag).item(0).getChildNodes();
@@ -422,15 +403,15 @@ public class FoodActivity extends AppCompatActivity {
 
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         IntentResult intentResult = IntentIntegrator.parseActivityResult(
                 requestCode,resultCode,data
         );
         if (intentResult.getContents() != null){
-            final String[] result = new String[1];
+            
             //result 가 null이 아닐때
-            AlertDialog.Builder builder = new AlertDialog.Builder(
+            builder = new AlertDialog.Builder(
                     FoodActivity.this
             );
             builder.setTitle("결과");
@@ -440,12 +421,17 @@ public class FoodActivity extends AppCompatActivity {
 
 //
             String queryUrl = "https://openapi.foodsafetykorea.go.kr/api/".concat(key).concat("/I2570/xml/1/1/BRCD_NO=").concat(Barcodedata);
+
             Thread thread = new Thread(new Runnable() {
 
                 @Override
                 public void run() {
                     try  {
-                        result[0] = getXmlData(queryUrl);
+
+                        getXmlData(queryUrl);
+                        Log.d("제발", result1+name+company); //여기서도 출력이 잘 돼요
+
+
                         //Your code goes here
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -454,18 +440,33 @@ public class FoodActivity extends AppCompatActivity {
             });
 
             thread.start();
-//            OpenApI dust = new OpenApI(queryUrl);
-//            dust.execute();
-//            getXmlData(queryUrl);
-            builder.setMessage(result[0]);
-            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            builder.setMessage("상품명:" + name+ "  제조사:" +company); //근데 여기서 출력이 안돼요
+            Log.d("제발요", name+company);
+
+
+            builder.setPositiveButton("등록", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int which) {
                     //Diamiss 다이얼로그
                     dialogInterface.dismiss();
                 }
             });
-            builder.show();
+            builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+//            builder.create().show();
+
+
+            showdialog05();
+
         }else{
             //result content가 null일때
             Toast.makeText(getApplicationContext(), "스캔하지 않으셨습니다.", Toast.LENGTH_SHORT).show();
@@ -589,6 +590,26 @@ public class FoodActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+
+    }
+    public void showdialog05(){
+
+        initDatePicker();
+        dateset = (Button)dialog02.findViewById(R.id.dateset);
+        dateset.setText(getTodaysDate());
+        dialog05.show();
+
+        EditText fnameinput = dialog05.findViewById(R.id.fnameInput);
+        fnameinput.setText(name + company);
+        ////////////////////////////////////여기서 수량정보를 얻어올 수 있음///////////////////////////
+
+        Button button = dialog05.findViewById(R.id.plus_button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog05.dismiss();
+            }
+        });
 
     }
 
