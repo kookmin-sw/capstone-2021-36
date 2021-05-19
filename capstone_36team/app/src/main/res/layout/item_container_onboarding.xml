@@ -13,26 +13,28 @@
         android:id="@+id/imageOnboarding"
         android:layout_width="260dp"
         android:layout_height="260dp"
-        android:layout_margin="15dp"
+        android:layout_margin="25dp"
         android:adjustViewBounds="true"
         android:contentDescription="@string/app_name"/>
 
     <TextView
+        android:layout_marginTop="20dp"
         android:id="@+id/textTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textColor="@color/black"
-        android:textSize="20sp"
+        android:textSize="25sp"
         android:textStyle="bold"/>
 
     <TextView
+        android:layout_marginTop="20dp"
         android:id="@+id/textDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textColor="@color/black"
-        android:textSize="18sp"/>
+        android:textSize="17sp"/>
 
 
 
