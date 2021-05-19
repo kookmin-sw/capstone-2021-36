@@ -175,7 +175,8 @@ public class FoodActivity extends AppCompatActivity {
 
 
 
-        userRef.addChildEventListener(new ChildEventListener() {
+        userRef.addChildEventListener(new ChildEventListener()
+        {
             @Override
             public void onChildAdded(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
                 //adapter.add(snapshot.getValue(String.class));
@@ -192,6 +193,21 @@ public class FoodActivity extends AppCompatActivity {
                 mkChildEventListener(adapter);
 //                adapter.clear();
 //                conditionRef = mDatabase.child("HomeDB").child(snapshot.getValue(String.class)).child("Fridge");
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull @NotNull DataSnapshot snapshot) {
+                
+            }
+
+            @Override
+            public void onChildMoved(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
             }
         });
 
