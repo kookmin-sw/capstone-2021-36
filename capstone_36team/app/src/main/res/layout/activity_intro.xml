@@ -8,7 +8,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/buttonOnboardingAction"
-        android:backgroundTint="@color/colorIntro"
+        android:backgroundTint="@color/colorLightblue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="20dp"

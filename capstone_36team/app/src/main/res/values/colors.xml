@@ -7,4 +7,15 @@
     <color name="colorIntro">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="colorBackground">#FFFFFFFF</color>
+    <color name="colorLightblue">#66B9F9</color>
+
+    <!-- Bottom Navigation Bar-->
+    <color name="selecedIconColor">#66B9F9</color>
+    <color name="defaultIconColor">#F6F6F6</color>
+    <color name="countTextColor">#fff</color>
+    <color name="countBackgroundColor">#F45E0B</color>
+    <color name="circleColor">#fff</color>
+    <color name="backgroundBottomcolor">#66B9F9</color>
+    <color name="shadowColor">#2E2E2E</color>
+
 </resources>
