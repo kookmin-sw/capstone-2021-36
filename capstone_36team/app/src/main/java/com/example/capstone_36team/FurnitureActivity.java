@@ -1,15 +1,21 @@
 package com.example.capstone_36team;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -23,6 +29,7 @@ public class FurnitureActivity extends AppCompatActivity {
     private Dialog dilaog01;
     private ListView listView_item;
     private Button btn_add_item;
+    private Dialog dialog03;
 
     private Button modify;
     private Dialog dialog02;
@@ -39,6 +46,10 @@ public class FurnitureActivity extends AppCompatActivity {
         dialog02 = new Dialog(FurnitureActivity.this);       // Dialog 초기화
         dialog02.requestWindowFeature(Window.FEATURE_NO_TITLE); // 타이틀 제거
         dialog02.setContentView(R.layout.plus_dialog_layout_nofood);
+        dialog03 = new Dialog(FurnitureActivity.this);       // Dialog 초기화
+        dialog03.requestWindowFeature(Window.FEATURE_NO_TITLE); // 타이틀 제거
+        dialog03.setContentView(R.layout.search_result);
+
 
 
         ///////추가버튼////////
@@ -157,6 +168,47 @@ public class FurnitureActivity extends AppCompatActivity {
                 dialog02.dismiss();
             }
         });
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) { //메뉴바 관련 함수(검색)
+        getMenuInflater().inflate(R.menu.trash_button, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_trash:
+                Log.d("쓰레기통", "클릭됨");
+                showDialog03();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+    }
+    public void showDialog03(){ //다이얼로그 함수
+        Button searchbutton = dialog03.findViewById(R.id.btn_search_result);
+        searchbutton.setText("삭제");
+        dialog03.show(); // 다이얼로그 띄우기
+        TextView edittext_searchname = dialog03.findViewById(R.id.text_search_result);
+        edittext_searchname.setTextSize(20);
+        edittext_searchname.setText("해당가구를 삭제하시겠습니까?");
+
+        // *주의할 점: findViewById()를 쓸 때는 -> 앞에 반드시 다이얼로그 이름을 붙여야 한다.
+
+
+
+        searchbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) { //삭제 클릭했을때
+
+                ////////////////여기서 DB삭제되게//////////
+
+                dialog03.dismiss();
+            }
+        });
+
     }
 
 

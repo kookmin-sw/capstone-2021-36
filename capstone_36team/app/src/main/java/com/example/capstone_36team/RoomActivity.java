@@ -37,6 +37,8 @@ public class RoomActivity extends AppCompatActivity {
     private ImageView image4;
     private Dialog dialog03;
     private Dialog dialog04;
+    private Dialog dialog06;
+    private boolean emdfhr = false;
     private static  final String IMAGEVIEW_TAG = "드래그 이미지";
     private String family_name = "family1";
     DatabaseReference mDatabase= FirebaseDatabase.getInstance().getReference();
@@ -67,6 +69,9 @@ public class RoomActivity extends AppCompatActivity {
         dialog04 = new Dialog(RoomActivity.this);       // Dialog 초기화
         dialog04.requestWindowFeature(Window.FEATURE_NO_TITLE); // 타이틀 제거
         dialog04.setContentView(R.layout.search_result);
+        dialog06 = new Dialog(RoomActivity.this);       // Dialog 초기화
+        dialog06.requestWindowFeature(Window.FEATURE_NO_TITLE); // 타이틀 제거
+        dialog06.setContentView(R.layout.search_dialog);
 
 
 
@@ -74,6 +79,34 @@ public class RoomActivity extends AppCompatActivity {
 
 
         MyTouchListener myTouchListener = new MyTouchListener();
+
+
+        float image2_x = (float) 0.0;
+        float image2_y = (float) 1422.0;
+        float image4_x = (float) 0.0;
+        float image4_y = (float) 1615.0;
+        float image1_x = (float) 193.0;
+        float image1_y =  (float) 1422.0;
+        float image3_x = (float) 193.0;
+        float image3_y = (float) 1422.0;
+        float image6_x = (float) 386.0;
+        float image6_y = (float) 1422.0;
+        float image5_x = (float) 386.0;
+        float image5_y = (float) 1615.0;
+        float image8_x = (float) 579.0;
+        float image8_y = (float) 1422.0;
+        float image7_x = (float) 579.0;
+        float image7_y = (float) 1615.0;
+        float image10_x = (float) 772.0;
+        float image10_y = (float) 1422.0;
+        float image9_x = (float) 772.0;
+        float image9_y = (float) 1615.0;
+
+
+
+
+
+
 
 
 
@@ -130,10 +163,10 @@ public class RoomActivity extends AppCompatActivity {
                 // 뷰 누름
                 oldXvalue = (int) motionEvent.getX();
                 oldYvalue = (int) motionEvent.getY();
-                if (this.first == true){ //삭제를 위한 코드
-                    startXvalue = v.getX();
-                    startYvalue = v.getY();}
-                this.first = false;
+                //삭제를 위한 코드
+                startXvalue = v.getX();
+                startYvalue = v.getY();
+
 
 
                 Log.d("viewTest", "oldXvalue : "+ oldXvalue + " oldYvalue : " + oldYvalue);    // View 내부에서 터치한 지점의 상대 좌표값.
@@ -148,7 +181,11 @@ public class RoomActivity extends AppCompatActivity {
                 v.setY(v.getY() + (motionEvent.getY()) - (v.getHeight()/2));
 
             }else if(motionEvent.getAction() == MotionEvent.ACTION_UP){
+                Log.d("확인좀", String.valueOf(startYvalue));
+                if (startYvalue >= 1417)
+                    showDialog06();
                 // 뷰에서 손을 뗌
+                this.first = false;
 
                 if(v.getX() < 0){
                     v.setX(0);
@@ -292,6 +329,50 @@ public class RoomActivity extends AppCompatActivity {
                 text_search_result.setTextSize(20);
                 dialog03.dismiss();
                 dialog04.show();
+                btn_search_result.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog04.dismiss();
+                    }
+                });
+
+
+
+
+
+            }
+        });
+        Button nosearchbutton = dialog03.findViewById(R.id.nbutton);
+        nosearchbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) { //취소 클릭했을때
+                Log.d("확인", "취소릭됨");
+                // 원하는 기능 구현
+                dialog03.dismiss();
+
+            }
+        });
+    }
+    public void showDialog06(){ //다이얼로그 함수(검색)
+        dialog03.show(); // 다이얼로그 띄우기
+        EditText edittext_searchname = dialog03.findViewById(R.id.edittext_searchname);
+        edittext_searchname.setHint("가구 이름");
+        emdfhr = true;
+
+        Button searchbutton = dialog03.findViewById(R.id.pbutton);
+        searchbutton.setText("등록");
+        // *주의할 점: findViewById()를 쓸 때는 -> 앞에 반드시 다이얼로그 이름을 붙여야 한다.
+
+
+
+        searchbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) { //등록 클릭했을때
+
+                Button btn_search_result = dialog04.findViewById(R.id.btn_search_result);
+
+                dialog03.dismiss();
+
                 btn_search_result.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
