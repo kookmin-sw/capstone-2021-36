@@ -22,12 +22,17 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class LoginActivity extends AppCompatActivity {
 
     private GoogleSignInClient mGoogleSignInClient;
     private final static int RC_SIGN_IN = 123;
     private FirebaseAuth mAuth;
+    DatabaseReference mDatabase= FirebaseDatabase.getInstance().getReference(); // 22
+    DatabaseReference userID = mDatabase.child("UserDB"); // 22
+    String family_name = "family1"; //22
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,10 +54,12 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
+        /*
         if (currentUser != null){
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            Intent intent = new Intent(getApplicationContext(), IntroActivity.class);
             startActivity(intent);
         }
+         */
     }
 
     private void CreateRequest() {
@@ -98,8 +105,10 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = mAuth.getCurrentUser();
-                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                            Intent intent = new Intent(getApplicationContext(), IntroActivity.class);
                             startActivity(intent);
+                            String cu = mAuth.getUid();
+                            mDatabase.child("UserDB").child(cu).setValue(family_name);
                         } else {
                             // If sign in fails, display a message to the user.
                             Toast.makeText(LoginActivity.this, "로그인에 실패했습니다.", Toast.LENGTH_SHORT).show();

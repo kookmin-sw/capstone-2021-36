@@ -52,6 +52,9 @@ public class NotificationsFragment extends Fragment {
     private String uid = "testuid";
     DatabaseReference mDatabase= FirebaseDatabase.getInstance().getReference();
     DatabaseReference conditionRef = mDatabase.child("UserDB").child(uid);
+    DatabaseReference mDatabase2= FirebaseDatabase.getInstance().getReference(); // 22
+    DatabaseReference userID = mDatabase2.child("UserDB");
+    public FirebaseAuth mAuth;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -97,8 +100,9 @@ public class NotificationsFragment extends Fragment {
         revoke.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 deleteUser();
+                Intent intent = new Intent(getActivity().getApplicationContext(), LoginActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -151,8 +155,8 @@ public class NotificationsFragment extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            Intent intent = new Intent(getActivity().getApplicationContext(), LoginActivity.class);
-                            startActivity(intent);
+                            String cu = mAuth.getUid();
+                            userID.child(cu).removeValue();
                         }
                     }
                 });
