@@ -1,6 +1,7 @@
 package com.example.capstone_36team.ui.notifications;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.util.Log;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,17 +20,32 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.bumptech.glide.Glide;
+import com.example.capstone_36team.LoginActivity;
 import com.example.capstone_36team.R;
 import com.example.capstone_36team.RoomActivity;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+
+import org.w3c.dom.Text;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class NotificationsFragment extends Fragment {
     private Button btn_partin;
+    TextView name;
+    TextView email;
+    ImageView image;
+    Button signOut;
+    Button revoke;
 
     private NotificationsViewModel notificationsViewModel;
     private Dialog dialog03;
@@ -43,6 +60,20 @@ public class NotificationsFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_notifications, container, false);
         final TextView textView = root.findViewById(R.id.text_notifications);
         final Button btn_partin = root.findViewById(R.id.bt_Partin);
+        name= root.findViewById(R.id.id_Nname);
+        email = root.findViewById(R.id.id_Email);
+        image = root.findViewById(R.id.image_Google);
+        signOut= root.findViewById(R.id.bt_Logout);
+        revoke = root.findViewById(R.id.bt_Revoke);
+
+        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getContext());
+
+        if(signInAccount != null){
+            name.setText(signInAccount.getDisplayName());
+            email.setText(signInAccount.getEmail());
+            Glide.with(this).load(signInAccount.getPhotoUrl()).into(image);
+        }
+
         dialog03 = new Dialog(getActivity());       // Dialog 초기화
         dialog03.requestWindowFeature(Window.FEATURE_NO_TITLE); // 타이틀 제거
         dialog03.setContentView(R.layout.search_dialog);
@@ -51,6 +82,23 @@ public class NotificationsFragment extends Fragment {
             public void onClick(View v) {
                 showDialog03();
 
+            }
+        });
+
+        signOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FirebaseAuth.getInstance().signOut();
+                Intent intent = new Intent(getActivity().getApplicationContext(), LoginActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        revoke.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                deleteUser();
             }
         });
 
@@ -94,5 +142,19 @@ public class NotificationsFragment extends Fragment {
 
             }
         });
+    }
+
+    public void deleteUser() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        user.delete()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Intent intent = new Intent(getActivity().getApplicationContext(), LoginActivity.class);
+                            startActivity(intent);
+                        }
+                    }
+                });
     }
 }
