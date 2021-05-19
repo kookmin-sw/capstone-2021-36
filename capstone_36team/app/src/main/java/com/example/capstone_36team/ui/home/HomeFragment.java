@@ -1,15 +1,20 @@
 package com.example.capstone_36team.ui.home;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,8 +29,10 @@ import com.example.capstone_36team.RoomActivity;
 public class HomeFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
-    private Button btn_add_place;
 
+    private Dialog dialog04;
+    private String category;
+    private Dialog dialog03;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -33,6 +40,13 @@ public class HomeFragment extends Fragment {
                 new ViewModelProvider(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         final Button btn_add_place = root.findViewById(R.id.btn_add_place);
+
+        dialog04 = new Dialog(getActivity());       // Dialog 초기화
+        dialog04.requestWindowFeature(Window.FEATURE_NO_TITLE); // 타이틀 제거
+        dialog04.setContentView(R.layout.search_dialog);
+        dialog03 = new Dialog(getActivity());       // Dialog 초기화
+        dialog03.requestWindowFeature(Window.FEATURE_NO_TITLE); // 타이틀 제거
+        dialog03.setContentView(R.layout.search_result);
         btn_add_place.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -41,6 +55,7 @@ public class HomeFragment extends Fragment {
 
             }
         });
+
 
         homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
@@ -56,9 +71,21 @@ public class HomeFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String category = LIST_MENU[position];
+
                 Intent intent = new Intent(getActivity(), RoomActivity.class);
                 startActivity(intent);
 
+            }
+        });
+        listview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                category = LIST_MENU[position];
+                Toast.makeText(getActivity(), category, Toast.LENGTH_SHORT).show();
+
+                showDialog04();
+
+                return true;
             }
         });
 
@@ -79,6 +106,66 @@ public class HomeFragment extends Fragment {
         myDialogFragment.show(getFragmentManager(), "Search Filter");
 
     }
+
+    public void showDialog04(){ //다이얼로그 함수
+        dialog04.show();
+        EditText editText = dialog04.findViewById(R.id.edittext_searchname);
+        Button button1 = dialog04.findViewById(R.id.pbutton);
+        Button button2 = dialog04.findViewById(R.id.nbutton);
+        button1.setText("변경");
+        button2.setText("삭제");
+        editText.setHint(category);
+
+
+        // *주의할 점: findViewById()를 쓸 때는 -> 앞에 반드시 다이얼로그 이름을 붙여야 한다.
+
+
+        button1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /////////////////////////DB변경//////////////////////
+                dialog04.dismiss();
+
+            }
+        });
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) { //취소 클릭하였을때
+                showDialog03();
+
+                dialog04.dismiss();
+            }
+        });
+
+    }
+    public void showDialog03(){ //다이얼로그 함수
+
+        dialog03.show();
+
+        Button button1 = dialog03.findViewById(R.id.btn_search_result);
+        TextView textView = dialog03.findViewById(R.id.text_search_result);
+        button1.setText("네");
+        textView.setText(category + "와" + category + "안의 목록을 정말 삭제하시겠습니까? ");
+        textView.setTextSize(20);
+
+        // *주의할 점: findViewById()를 쓸 때는 -> 앞에 반드시 다이얼로그 이름을 붙여야 한다.
+
+
+        button1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { //네 선택하였을떄
+
+
+
+                ////////////////////////DB 삭제////////////////////////
+                dialog03.dismiss();
+
+            }
+        });
+
+
+    }
+
 
 
 

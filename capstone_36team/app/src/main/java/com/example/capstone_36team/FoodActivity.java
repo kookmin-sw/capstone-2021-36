@@ -36,6 +36,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -108,6 +109,7 @@ public class FoodActivity extends AppCompatActivity {
     private Dialog dialog03;
     private Dialog dialog04;
     private Dialog dialog05;
+    private Dialog dialog07;
     String name;
     String company;
     private static final int REQUEST_IMAGE_CAPTURE = 672;
@@ -167,6 +169,9 @@ public class FoodActivity extends AppCompatActivity {
         dialog05 = new Dialog(FoodActivity.this);       // Dialog 초기화
         dialog05.requestWindowFeature(Window.FEATURE_NO_TITLE); // 타이틀 제거
         dialog05.setContentView(R.layout.plus_dialog_layout);
+        dialog07 = new Dialog(FoodActivity.this);       // Dialog 초기화
+        dialog07.requestWindowFeature(Window.FEATURE_NO_TITLE); // 타이틀 제거
+        dialog07.setContentView(R.layout.search_result);
 
         notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE); // 하추
         alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE); // 하추
@@ -191,6 +196,14 @@ public class FoodActivity extends AppCompatActivity {
 
         final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1);
         flist.setAdapter(adapter);
+        flist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                showDialog06();
+
+            }
+        });
+
 
 
 
@@ -638,7 +651,7 @@ public class FoodActivity extends AppCompatActivity {
     public void showdialog05(){
 
         initDatePicker();
-        dateset = (Button)dialog02.findViewById(R.id.dateset);
+        dateset = (Button)dialog05.findViewById(R.id.dateset);
         dateset.setText(getTodaysDate());
         dialog05.show();
 
@@ -720,7 +733,69 @@ public class FoodActivity extends AppCompatActivity {
         });
 
     }
+    public void showDialog06(){ //수동으로 입력 클릭하면 나오는다이얼로그 함수
+        Button plus_button = dialog02.findViewById(R.id.plus_button);
 
+        initDatePicker();
+        dateset = (Button)dialog02.findViewById(R.id.dateset);
+        dateset.setText(getTodaysDate());
+
+        dialog02.show(); // 다이얼로그 띄우기
+        EditText fnameinput = (EditText)dialog02.findViewById(R.id.fnameInput);
+        EditText fposinput = (EditText)dialog02.findViewById(R.id.fposInput);
+        EditText fcountinput = (EditText)dialog02.findViewById(R.id.fcountInput);
+        fnameinput.setText("원래 이름");
+        fposinput.setText("원래 장소");
+        fcountinput.setText("원래 수량");  //DB에서 받아와서 표시해주어야함///////////////////////
+        plus_button.setText("수정");
+
+
+        plus_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) { //등록
+                dialog02.dismiss(); // 다이얼로그 닫기
+                ////////////////////////////////////EditText에 적은것 DB에 반영/////////////////////////////////
+
+
+
+            }
+        });
+        Button no_plus_button = dialog02.findViewById(R.id.no_plus_button);
+        no_plus_button.setText("삭제");
+        no_plus_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) { //취소
+                Log.d("확인", "취소 클릭됨");
+
+                dialog02.dismiss();
+                showDialog07();
+            }
+        });
+    }
+    public void showDialog07() { //다이얼로그 함수
+
+        dialog07.show();
+
+        Button button1 = dialog07.findViewById(R.id.btn_search_result);
+        TextView textView = dialog07.findViewById(R.id.text_search_result);
+        button1.setText("네");
+        textView.setText("정말 삭제하시겠습니까?");
+        textView.setTextSize(20);
+
+        // *주의할 점: findViewById()를 쓸 때는 -> 앞에 반드시 다이얼로그 이름을 붙여야 한다.
+
+
+        button1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { //네 선택하였을떄
+
+
+                ////////////////////////DB 삭제////////////////////////
+                dialog07.dismiss();
+
+            }
+        });
+    }
 
 
 
