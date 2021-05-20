@@ -1,8 +1,10 @@
 package com.example.capstone_36team.ui.home;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,6 +49,11 @@ public class dialogfragment extends DialogFragment {
                         String Roomname = roomname.getText().toString();
                         //Roomname ---> 추가할 방 이름
                         // Roomname이용해서 이곳에 코드 추가하면 DB에 추가 가능
+                        Intent data = new Intent();
+                        data.putExtra("roomname", Roomname);
+                        getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, data);
+
+                        dismiss();
                     }
 
                 });
