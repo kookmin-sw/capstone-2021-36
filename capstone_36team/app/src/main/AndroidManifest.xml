@@ -19,7 +19,6 @@
         android:icon="@mipmap/ic_launcher"
 
         android:label="하우스피디아"
-        android:label="캡스톤 36팀 화이팅"
 
         android:networkSecurityConfig="@xml/network_config"
         android:roundIcon="@drawable/houseicon"
