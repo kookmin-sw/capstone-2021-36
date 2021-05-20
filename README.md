@@ -15,6 +15,9 @@
 
 
 
+<img src = "https://user-images.githubusercontent.com/73538957/118979211-325a5f00-b9b3-11eb-84d4-db0ce5c8daa7.gif" height=800px width=450px>
+
+
 
 - 집안의 냉장고, 물건 현황(종류 , 갯수, 위치 등) 기록 어플리케이션
   - 회원 가입 
