@@ -8,6 +8,8 @@ import android.content.ClipData;
 import android.content.ClipDescription;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
@@ -296,6 +298,8 @@ public class RoomActivity extends AppCompatActivity {
         dialog03.show(); // 다이얼로그 띄우기
         EditText edittext_searchname = dialog03.findViewById(R.id.edittext_searchname);
 
+
+        dialog03.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
 
         Button searchbutton = dialog03.findViewById(R.id.pbutton);

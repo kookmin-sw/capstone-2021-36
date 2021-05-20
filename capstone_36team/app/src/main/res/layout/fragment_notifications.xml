@@ -51,54 +51,49 @@
         app:layout_constraintTop_toBottomOf="@+id/id_Nname"
         tools:ignore="MissingConstraints" />
 
+
+    <Button
+        android:id="@+id/bt_Logout"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="로그아웃"
+
+        app:layout_constraintBottom_toTopOf="@+id/bt_Partin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.212"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/id_Email"
+        app:layout_constraintVertical_bias="0.536"
+        tools:ignore="MissingConstraints" />
+
+
+    <Button
+        android:id="@+id/bt_revoke"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="회원탈퇴"
+
+        app:layout_constraintBottom_toTopOf="@+id/bt_Partin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.781"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/id_Email"
+        app:layout_constraintVertical_bias="0.536"
+        tools:ignore="MissingConstraints" />
+
     <Button
         android:id="@+id/bt_Partin"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="72dp"
-        android:text="참여"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/image_Google"
-        tools:ignore="MissingConstraints" />
+        android:text="가족참여"
 
-    <Button
-        android:id="@+id/bt_Make"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="92dp"
-        android:text="생성"
-        app:layout_constraintEnd_toStartOf="@+id/bt_Partin"
-        app:layout_constraintHorizontal_bias="0.92"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/image_Google"
-        tools:ignore="MissingConstraints" />
-
-    <Button
-        android:id="@+id/bt_Logout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="108dp"
-        android:text="로그아웃"
-        android:textColor="@android:color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/text_notifications"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/id_Email"
+        app:layout_constraintVertical_bias="0.843"
         tools:ignore="MissingConstraints" />
-
-    <Button
-        android:id="@+id/bt_Revoke"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="회원탈퇴"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bt_Logout"
-        app:layout_constraintVertical_bias="0.166" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

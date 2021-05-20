@@ -67,17 +67,18 @@ public class IntroActivity extends AppCompatActivity {
 
         OnboardingItem itemOne = new OnboardingItem();
         itemOne.setTitle("HousePedia에 오신걸 환영합니다");
-        itemOne.setDescription("당신의 삶의 편리함을 추구합니다\n집의 모든정보가 당신의 손끝에 있습니다");
+        itemOne.setDescription("당신의 삶의 편리함을 추구합니다\n집의 모든정보가\n당신의 손끝에 있습니다");
+
         itemOne.setImage(R.drawable.houseicon);
 
         OnboardingItem itemTwo = new OnboardingItem();
         itemTwo.setTitle("가구 및 물건 정리");
-        itemTwo.setDescription("가구들의 구조 및 집안의 모든 물건의 위치\n 수량정보를 저장해놓을 수 있습니다");
+        itemTwo.setDescription("가구들의 구조 및 집안 물건의 위치\n 수량정보를 저장해놓을 수 있습니다");
         itemTwo.setImage(R.drawable.furniture);
 
         OnboardingItem itemThree = new OnboardingItem();
         itemThree.setTitle("신선한 식재료 관리");
-        itemThree.setDescription("식재료 수량 관리가 가능하고\n음식 유통기한에 맞춰 알려주는 알람기능");
+        itemThree.setDescription("식재료 수량 관리가 가능하고\n음식 유통기한에 맞춰 알람기능");
         itemThree.setImage(R.drawable.food2);
 
         OnboardingItem itemFour = new OnboardingItem();

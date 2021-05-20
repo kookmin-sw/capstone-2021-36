@@ -52,6 +52,9 @@ public class FurnitureActivity extends AppCompatActivity {
 
 
 
+
+
+
         ///////추가버튼////////
         btn_add_item.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -20,7 +20,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.drawable.ColorDrawable;
 import android.media.ExifInterface;
 import android.media.Image;
 import android.net.Uri;
@@ -559,6 +561,8 @@ public class FoodActivity extends AppCompatActivity {
         initDatePicker();
         dateset = (Button)dialog02.findViewById(R.id.dateset);
         dateset.setText(getTodaysDate());
+        dialog02.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
 
         dialog02.show(); // 다이얼로그 띄우기
 
