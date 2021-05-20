@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -24,6 +25,7 @@ import com.bumptech.glide.Glide;
 import com.example.capstone_36team.LoginActivity;
 import com.example.capstone_36team.R;
 import com.example.capstone_36team.RoomActivity;
+import com.example.capstone_36team.ui.home.dialogfragment;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -52,9 +54,6 @@ public class NotificationsFragment extends Fragment {
     private String uid = "testuid";
     DatabaseReference mDatabase= FirebaseDatabase.getInstance().getReference();
     DatabaseReference conditionRef = mDatabase.child("UserDB").child(uid);
-    DatabaseReference mDatabase2= FirebaseDatabase.getInstance().getReference(); // 22
-    DatabaseReference userID = mDatabase2.child("UserDB");
-    public FirebaseAuth mAuth;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -100,9 +99,7 @@ public class NotificationsFragment extends Fragment {
         revoke.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                deleteUser();
-                Intent intent = new Intent(getActivity().getApplicationContext(), LoginActivity.class);
-                startActivity(intent);
+                openRevokeFrag();
             }
         });
 
@@ -148,17 +145,12 @@ public class NotificationsFragment extends Fragment {
         });
     }
 
-    public void deleteUser() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        user.delete()
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            String cu = mAuth.getUid();
-                            userID.child(cu).removeValue();
-                        }
-                    }
-                });
+    private void openRevokeFrag() { //dialog 관련 함수
+
+        RevokeFragment rvk = new RevokeFragment();
+        rvk.setTargetFragment(this, 0);
+        rvk.show(getFragmentManager(), "revoke");
+
     }
+
 }
