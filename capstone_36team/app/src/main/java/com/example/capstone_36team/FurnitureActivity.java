@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -142,7 +144,7 @@ public class FurnitureActivity extends AppCompatActivity {
 
 
 
-
+        dialog02.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog02.show(); // 다이얼로그 띄우기
 
         Button plus_button = dialog02.findViewById(R.id.plus_button2);
@@ -191,6 +193,7 @@ public class FurnitureActivity extends AppCompatActivity {
 
     }
     public void showDialog03(){ //다이얼로그 함수
+
         Button searchbutton = dialog03.findViewById(R.id.btn_search_result);
         searchbutton.setText("삭제");
         dialog03.show(); // 다이얼로그 띄우기

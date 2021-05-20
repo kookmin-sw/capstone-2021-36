@@ -27,9 +27,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import org.jetbrains.annotations.NotNull;
 
 
 public class RoomActivity extends AppCompatActivity {
@@ -40,12 +45,12 @@ public class RoomActivity extends AppCompatActivity {
     private Dialog dialog03;
     private Dialog dialog04;
     private Dialog dialog06;
+    private String stringquery;
     private boolean emdfhr = false;
     private static  final String IMAGEVIEW_TAG = "드래그 이미지";
     private String family_name = "family1";
     DatabaseReference mDatabase= FirebaseDatabase.getInstance().getReference();
     DatabaseReference conditionRef = mDatabase.child("HomeDB").child(family_name).child("room1");
-
 
 
 
@@ -296,6 +301,7 @@ public class RoomActivity extends AppCompatActivity {
 
     public void showDialog03(){ //다이얼로그 함수(검색)
         dialog03.show(); // 다이얼로그 띄우기
+        dialog03.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         EditText edittext_searchname = dialog03.findViewById(R.id.edittext_searchname);
 
 
@@ -306,7 +312,7 @@ public class RoomActivity extends AppCompatActivity {
 
         // *주의할 점: findViewById()를 쓸 때는 -> 앞에 반드시 다이얼로그 이름을 붙여야 한다.
 
-
+        searchbutton.setText("검색");
 
         searchbutton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -318,14 +324,31 @@ public class RoomActivity extends AppCompatActivity {
                 Editable search = edittext_searchname.getText();
                 //////////edittext에 입력한 문자의 경로를 query에 담습니다.//////
                 Query query = conditionRef.child(String.valueOf(search));
+                conditionRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                        if(!snapshot.hasChild(String.valueOf(search)))
+                            stringquery = "검색결과가 없습니다.";
+                        else{
+                            stringquery = String.valueOf(query);
+                            stringquery.replace("/%EB%AC%BC%ED%92%88%20%EC%9D%B4%EB%A6%84\n","");
 
-                String stringquery = String.valueOf(query);
-                stringquery.replace("/%EB%AC%BC%ED%92%88%20%EC%9D%B4%EB%A6%84\n","");
+                            StringBuffer stringBufferquery = new StringBuffer(stringquery);
 
-                StringBuffer stringBufferquery = new StringBuffer(stringquery);
+                            stringBufferquery.replace(0,58,"");
+                            stringquery = String.valueOf(stringBufferquery);
 
-                stringBufferquery.replace(0,58,"");
-                stringquery = String.valueOf(stringBufferquery);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                    }
+                });
+
+
+
 
                 TextView text_search_result = dialog04.findViewById(R.id.text_search_result);
                 Button btn_search_result = dialog04.findViewById(R.id.btn_search_result);
@@ -358,6 +381,7 @@ public class RoomActivity extends AppCompatActivity {
         });
     }
     public void showDialog06(){ //다이얼로그 함수(검색)
+        dialog03.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog03.show(); // 다이얼로그 띄우기
         EditText edittext_searchname = dialog03.findViewById(R.id.edittext_searchname);
         edittext_searchname.setHint("가구 이름");

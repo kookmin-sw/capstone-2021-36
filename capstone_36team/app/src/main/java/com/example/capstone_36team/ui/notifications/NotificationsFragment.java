@@ -2,6 +2,8 @@ package com.example.capstone_36team.ui.notifications;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.util.Log;
@@ -114,6 +116,7 @@ public class NotificationsFragment extends Fragment {
     public void showDialog03(){ //다이얼로그 함수
         Button searchbutton = dialog03.findViewById(R.id.pbutton);
         searchbutton.setText("참여");
+        dialog03.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog03.show(); // 다이얼로그 띄우기
         EditText edittext_searchname = (EditText) dialog03.findViewById(R.id.edittext_searchname);
 
