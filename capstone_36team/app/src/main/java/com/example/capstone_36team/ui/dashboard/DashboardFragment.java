@@ -2,6 +2,8 @@ package com.example.capstone_36team.ui.dashboard;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -110,6 +112,7 @@ public class DashboardFragment extends Fragment {
 
     }
     public void showDialog04(){ //다이얼로그 함수
+        dialog04.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog04.show();
         EditText editText = dialog04.findViewById(R.id.edittext_searchname);
         Button button1 = dialog04.findViewById(R.id.pbutton);
@@ -143,10 +146,11 @@ public class DashboardFragment extends Fragment {
     public void showDialog03(){ //다이얼로그 함수
         dialog03.show();
 
+
         Button button1 = dialog03.findViewById(R.id.btn_search_result);
         TextView textView = dialog03.findViewById(R.id.text_search_result);
         button1.setText("네");
-        textView.setText(category + "와" + category + "안의 목록을 정말 삭제하시겠습니까? ");
+        textView.setText(category + "와\n" + category + "안의 목록을 정말 삭제하시겠습니까? ");
         textView.setTextSize(20);
 
         // *주의할 점: findViewById()를 쓸 때는 -> 앞에 반드시 다이얼로그 이름을 붙여야 한다.

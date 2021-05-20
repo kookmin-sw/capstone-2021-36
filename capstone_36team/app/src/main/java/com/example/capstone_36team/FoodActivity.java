@@ -123,7 +123,7 @@ public class FoodActivity extends AppCompatActivity {
     String barcoderesult1;
     String result1;
     AlertDialog.Builder builder;
-
+    String stringquery;
     String key = "593cd6a3496d4e1194ff";
     String Barcodedata ;
     String data;
@@ -141,7 +141,7 @@ public class FoodActivity extends AppCompatActivity {
 
     DatabaseReference mDatabase= FirebaseDatabase.getInstance().getReference();
     DatabaseReference userRef = mDatabase.child("UserDB").child(user_name);
-    DatabaseReference conditionRef; //= mDatabase.child("HomeDB").child(family_name).child("Fridge");
+    DatabaseReference conditionRef= mDatabase.child("UserDB").child(user_name).child("Fridge");
 
 //    String userId = "user1";
 //    String FamilyName = mDatabase.child("UserDB").child(userId).get();
@@ -302,7 +302,7 @@ public class FoodActivity extends AppCompatActivity {
 
     public void showDialog01(){ //다이얼로그 함수
         dilaog01.show(); // 다이얼로그 띄우기
-
+        dilaog01.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         // *주의할 점: findViewById()를 쓸 때는 -> 앞에 반드시 다이얼로그 이름을 붙여야 한다.
 
@@ -653,6 +653,9 @@ public class FoodActivity extends AppCompatActivity {
 
     }
     public void showdialog05(){
+        dialog05.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+
 
         initDatePicker();
         dateset = (Button)dialog05.findViewById(R.id.dateset);
@@ -675,31 +678,54 @@ public class FoodActivity extends AppCompatActivity {
 
     public void showDialog03(){ //다이얼로그 함수(검색)
         dialog03.show(); // 다이얼로그 띄우기
-
-
-        // *주의할 점: findViewById()를 쓸 때는 -> 앞에 반드시 다이얼로그 이름을 붙여야 한다.
+        dialog03.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         EditText edittext_searchname = dialog03.findViewById(R.id.edittext_searchname);
 
 
+        dialog03.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
 
         Button searchbutton = dialog03.findViewById(R.id.pbutton);
+
+        // *주의할 점: findViewById()를 쓸 때는 -> 앞에 반드시 다이얼로그 이름을 붙여야 한다.
+
+        searchbutton.setText("검색");
+
         searchbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) { //검색 클릭했을때
+                Log.d("확인", "검색클릭됨");
                 Log.d("확인", "검색클릭됨");
                 // 원하는 기능 구현
                 ///////////////////////검색기능////////////////////
                 Editable search = edittext_searchname.getText();
                 //////////edittext에 입력한 문자의 경로를 query에 담습니다.//////
                 Query query = conditionRef.child(String.valueOf(search));
+                conditionRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                        if(!snapshot.hasChild(String.valueOf(search)))
+                            stringquery = "검색결과가 없습니다.";
+                        else{
+                            stringquery = String.valueOf(query);
+                            stringquery.replace("/%EB%AC%BC%ED%92%88%20%EC%9D%B4%EB%A6%84\n","");
 
-                String stringquery = String.valueOf(query);
-                stringquery.replace("/%EB%AC%BC%ED%92%88%20%EC%9D%B4%EB%A6%84\n","");
+                            StringBuffer stringBufferquery = new StringBuffer(stringquery);
 
-                StringBuffer stringBufferquery = new StringBuffer(stringquery);
+                            stringBufferquery.replace(0,58,"");
+                            stringquery = String.valueOf(stringBufferquery);
 
-                stringBufferquery.replace(0,58,"");
-                stringquery = String.valueOf(stringBufferquery);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                    }
+                });
+
+
+
 
                 TextView text_search_result = dialog04.findViewById(R.id.text_search_result);
                 Button btn_search_result = dialog04.findViewById(R.id.btn_search_result);
@@ -717,11 +743,6 @@ public class FoodActivity extends AppCompatActivity {
 
 
 
-                Log.d("쿼리", stringquery);
-
-
-
-
 
             }
         });
@@ -729,17 +750,16 @@ public class FoodActivity extends AppCompatActivity {
         nosearchbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) { //취소 클릭했을때
-                Log.d("확인", "취소클릭됨");
+                Log.d("확인", "취소릭됨");
                 // 원하는 기능 구현
                 dialog03.dismiss();
 
             }
         });
-
     }
     public void showDialog06(){ //수동으로 입력 클릭하면 나오는다이얼로그 함수
         Button plus_button = dialog02.findViewById(R.id.plus_button);
-
+        dialog02.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         initDatePicker();
         dateset = (Button)dialog02.findViewById(R.id.dateset);
         dateset.setText(getTodaysDate());
@@ -779,7 +799,7 @@ public class FoodActivity extends AppCompatActivity {
     public void showDialog07() { //다이얼로그 함수
 
         dialog07.show();
-
+        dialog07.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         Button button1 = dialog07.findViewById(R.id.btn_search_result);
         TextView textView = dialog07.findViewById(R.id.text_search_result);
         button1.setText("네");

@@ -2,6 +2,8 @@ package com.example.capstone_36team.ui.home;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,6 +27,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.capstone_36team.R;
 import com.example.capstone_36team.RoomActivity;
+
+import static android.view.Gravity.CENTER;
 
 public class HomeFragment extends Fragment {
 
@@ -109,6 +113,7 @@ public class HomeFragment extends Fragment {
 
     public void showDialog04(){ //다이얼로그 함수
         dialog04.show();
+        dialog04.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         EditText editText = dialog04.findViewById(R.id.edittext_searchname);
         Button button1 = dialog04.findViewById(R.id.pbutton);
         Button button2 = dialog04.findViewById(R.id.nbutton);
@@ -141,11 +146,12 @@ public class HomeFragment extends Fragment {
     public void showDialog03(){ //다이얼로그 함수
 
         dialog03.show();
-
+        dialog03.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         Button button1 = dialog03.findViewById(R.id.btn_search_result);
         TextView textView = dialog03.findViewById(R.id.text_search_result);
         button1.setText("네");
-        textView.setText(category + "와" + category + "안의 목록을 정말 삭제하시겠습니까? ");
+        textView.setText(category + "와\n" + category + "안의 목록을\n 정말 삭제하시겠습니까? ");
+        textView.setGravity(CENTER);
         textView.setTextSize(20);
 
         // *주의할 점: findViewById()를 쓸 때는 -> 앞에 반드시 다이얼로그 이름을 붙여야 한다.
