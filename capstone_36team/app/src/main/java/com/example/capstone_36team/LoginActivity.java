@@ -123,11 +123,16 @@ public class LoginActivity extends AppCompatActivity {
                                     if(!snapshot.hasChild(cu)){
                                         childUpdates.put("/" + cu + "/" + "family", "Rand" + cu);
                                         userID.updateChildren(childUpdates);
+                                        ((GlobalVariable)getApplication()).setuId(cu);
+                                        ((GlobalVariable)getApplication()).setfamilyId("Rand" + cu);
                                         Intent intent = new Intent(getApplicationContext(), IntroActivity.class);
                                         startActivity(intent);
                                     }
                                     else{
                                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                        String familycode = snapshot.child(cu).child("family").getValue().toString();
+                                        ((GlobalVariable)getApplication()).setuId(cu);
+                                        ((GlobalVariable)getApplication()).setfamilyId(familycode);
                                         startActivity(intent);
                                     }
                                 }
