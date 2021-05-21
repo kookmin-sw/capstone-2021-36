@@ -9,6 +9,7 @@ import com.example.capstone_36team.ui.home.HomeFragment;
 import com.example.capstone_36team.ui.notifications.NotificationsFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
@@ -71,6 +72,13 @@ public class MainActivity extends AppCompatActivity {
                 .beginTransaction()
                 .replace(R.id.nav_host_fragment,fragment)
                 .commit();
+    }
+
+    public void setActionBarTitle(String title) {
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(title);
+        }
     }
 
 
