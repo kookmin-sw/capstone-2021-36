@@ -122,10 +122,10 @@ public class FoodActivity extends AppCompatActivity {
     private NotificationManager notificationManager;
     String barcoderesult1;
     String result1;
-    AlertDialog.Builder builder;
-    String stringquery;
-    String key = "593cd6a3496d4e1194ff";
-    String Barcodedata ;
+
+    String stringquery;AlertDialog.Builder builder;
+
+    String key = "593cd6a3496d4e1194ff";    String Barcodedata ;
     String data;
     Button dateset;
     DatePickerDialog datePickerDialog;
