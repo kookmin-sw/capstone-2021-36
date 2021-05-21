@@ -20,11 +20,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
+import com.example.capstone_36team.GlobalVariable;
 import com.example.capstone_36team.LoginActivity;
+import com.example.capstone_36team.MainActivity;
 import com.example.capstone_36team.R;
 import com.example.capstone_36team.RoomActivity;
 import com.example.capstone_36team.ui.home.dialogfragment;
@@ -53,9 +56,10 @@ public class NotificationsFragment extends Fragment {
 
     private NotificationsViewModel notificationsViewModel;
     private Dialog dialog03;
-    private String uid = "testuid";
+    private String uid;
     DatabaseReference mDatabase= FirebaseDatabase.getInstance().getReference();
-    DatabaseReference conditionRef = mDatabase.child("UserDB").child(uid);
+    DatabaseReference conditionRef;// = mDatabase.child("UserDB").child(uid);
+    GlobalVariable familydata;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -69,6 +73,9 @@ public class NotificationsFragment extends Fragment {
         image = root.findViewById(R.id.image_Google);
         signOut= root.findViewById(R.id.bt_Logout);
         revoke = root.findViewById(R.id.bt_Revoke);
+        familydata = (GlobalVariable)getActivity().getApplicationContext();
+        uid = familydata.getuId();
+        conditionRef = mDatabase.child("UserDB").child(uid);
 
         GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getContext());
 
@@ -113,6 +120,16 @@ public class NotificationsFragment extends Fragment {
         });
         return root;
     }
+
+    @Override //onResume 주기일때 타이틀 바꿔줌
+    public void onResume() {
+        super.onResume();
+        FragmentActivity activity = getActivity();
+        if (activity != null) {
+            ((MainActivity) activity).setActionBarTitle("My Info");
+        }
+    }
+
     public void showDialog03(){ //다이얼로그 함수
         Button searchbutton = dialog03.findViewById(R.id.pbutton);
         searchbutton.setText("참여");
@@ -129,10 +146,12 @@ public class NotificationsFragment extends Fragment {
             public void onClick(View view) { //검색 클릭했을때
                 ///////edittext_searchname에 텍스트 입력됨//////
                 Log.d("확인", "가족변경 " + edittext_searchname);
+                String newfamilycode = edittext_searchname.getText().toString();
                 Map<String, Object> familyUpdates = new HashMap<>();
-                familyUpdates.put("family", edittext_searchname.getText().toString());
+                familyUpdates.put("family", newfamilycode);
 
                 conditionRef.updateChildren(familyUpdates);
+                familydata.setfamilyId(newfamilycode);
                 dialog03.dismiss();
             }
         });

@@ -126,10 +126,10 @@ public class FoodActivity extends AppCompatActivity {
     private NotificationManager notificationManager;
     String barcoderesult1;
     String result1;
-    AlertDialog.Builder builder;
-    String stringquery;
-    String key = "593cd6a3496d4e1194ff";
-    String Barcodedata ;
+
+    String stringquery;AlertDialog.Builder builder;
+
+    String key = "593cd6a3496d4e1194ff";    String Barcodedata ;
     String data;
     Button dateset;
     String item;
@@ -138,16 +138,20 @@ public class FoodActivity extends AppCompatActivity {
     String date;
 
     private ListView flist;
+<<<<<<< HEAD
     private String user_name = "testuid";
     private String[] names = {"abc<가구1<방1", "ab2<가구2<방1"}; //////{"물품<장소", "물품<장소" "물품<장소"이런식으로 데이터가 들어왔음 좋겠습니다.}
+=======
+    private String user_name;
+    private String familyname;
+>>>>>>> c8b1882be3a65fc113a3cd84d38a207aba520677
 
 
 
 
 
     DatabaseReference mDatabase= FirebaseDatabase.getInstance().getReference();
-    DatabaseReference userRef = mDatabase.child("UserDB").child(user_name);
-    DatabaseReference conditionRef= mDatabase.child("UserDB").child(user_name).child("Fridge");
+    DatabaseReference conditionRef;
 
 //    String userId = "user1";
 //    String FamilyName = mDatabase.child("UserDB").child(userId).get();
@@ -191,7 +195,6 @@ public class FoodActivity extends AppCompatActivity {
         alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE); // 하추
         mCalender = new GregorianCalendar(); // 하추
         Log.v("HelloAlarmActivity", mCalender.getTime().toString()); // 하추
-
 //        ArrayList<ItemData> fData = new ArrayList<>();
 //        ItemData fItem = new ItemData();
 //        for (int i=0; i<strDate.length ; ++i)
@@ -210,63 +213,15 @@ public class FoodActivity extends AppCompatActivity {
 
         final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1);
         flist.setAdapter(adapter);
-        flist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                showDialog06();
-
-            }
-        });
+        Intent refnameIntent = getIntent();
+        String fridgename = refnameIntent.getStringExtra("fridgename");
 
 
+        user_name = refnameIntent.getStringExtra("userid");
+        familyname = refnameIntent.getStringExtra("familyid");
+        conditionRef = mDatabase.child("HomeDB").child(familyname).child("fridgelist").child(fridgename).child("foodlist");
+        //DatabaseReference userRef = mDatabase.child("UserDB").child(user_name);
 
-
-        userRef.addChildEventListener(new ChildEventListener()
-        {
-            @Override
-            public void onChildAdded(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
-                //adapter.add(snapshot.getValue(String.class));
-                conditionRef = mDatabase.child("HomeDB").child(snapshot.getValue(String.class)).child("Fridge");
-                adapter.clear();
-                mkChildEventListener(adapter);
-
-            }
-
-            @Override
-            public void onChildChanged(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
-                conditionRef = mDatabase.child("HomeDB").child(snapshot.getValue(String.class)).child("Fridge");
-                adapter.clear();
-                mkChildEventListener(adapter);
-//                adapter.clear();
-//                conditionRef = mDatabase.child("HomeDB").child(snapshot.getValue(String.class)).child("Fridge");
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull @NotNull DataSnapshot snapshot) {
-                
-            }
-
-            @Override
-            public void onChildMoved(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull @NotNull DatabaseError error) {
-
-            }
-        });
-
-
-        btn_add_food.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDialog01();
-            }
-        });
-    }
-
-    public void mkChildEventListener(ArrayAdapter<String> adapter){
         conditionRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -299,7 +254,97 @@ public class FoodActivity extends AppCompatActivity {
                 Log.d("MainActivity", "ChildEventListener - onCancelled" + databaseError.getMessage());
             }
         });
+
+        flist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                showDialog06();
+
+            }
+        });
+
+
+
+
+//        userRef.addChildEventListener(new ChildEventListener()
+//        {
+//            @Override
+//            public void onChildAdded(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
+//                //adapter.add(snapshot.getValue(String.class));
+//                conditionRef = mDatabase.child("HomeDB").child(snapshot.getValue(String.class)).child("fridgelist").child(fridgename).child("foodlist");
+//                adapter.clear();
+//                mkChildEventListener(adapter);
+//
+//            }
+//
+//            @Override
+//            public void onChildChanged(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
+//                conditionRef = mDatabase.child("HomeDB").child(snapshot.getValue(String.class)).child("Fridge");
+//                adapter.clear();
+//                mkChildEventListener(adapter);
+////                adapter.clear();
+////                conditionRef = mDatabase.child("HomeDB").child(snapshot.getValue(String.class)).child("Fridge");
+//            }
+//
+//            @Override
+//            public void onChildRemoved(@NonNull @NotNull DataSnapshot snapshot) {
+//
+//            }
+//
+//            @Override
+//            public void onChildMoved(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+//
+//            }
+//        });
+
+
+        btn_add_food.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDialog01();
+            }
+        });
     }
+
+//    public void mkChildEventListener(ArrayAdapter<String> adapter){
+//        conditionRef.addChildEventListener(new ChildEventListener() {
+//            @Override
+//            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+//
+//                adapter.add(dataSnapshot.getKey());
+//                //Log.d("MainActivity", "ChildEventListener - onChildAdded : " + dataSnapshot + dataSnapshot.getKey());
+////                fItem.strTitle =  "t";//dataSnapshot.getKey(); //strTitle -> 물품 이름
+////                fItem.strDate =  "1";//dataSnapshot.child("count").getValue(String.class);
+////                fData.add(fItem);
+//                Log.d("MainActivity", "ChildEventListener - onChildChanged : ");
+//            }
+//
+//            @Override
+//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+//                Log.d("MainActivity", "ChildEventListener - onChildChanged : " + dataSnapshot);
+//            }
+//
+//            @Override
+//            public void onChildRemoved(DataSnapshot dataSnapshot) {
+//                Log.d("MainActivity", "ChildEventListener - onChildRemoved : " + dataSnapshot.getKey());
+//            }
+//
+//            @Override
+//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+//                Log.d("MainActivity", "ChildEventListener - onChildMoved" + s);
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//                Log.d("MainActivity", "ChildEventListener - onCancelled" + databaseError.getMessage());
+//            }
+//        });
+//    }
 
     private String getTodaysDate() {
         Calendar ca1 = Calendar.getInstance();

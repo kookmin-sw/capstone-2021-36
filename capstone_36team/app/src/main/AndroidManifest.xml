@@ -13,8 +13,11 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
+        android:name =".GlobalVariable"
+
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
+
         android:label="하우스피디아"
         android:networkSecurityConfig="@xml/network_config"
         android:roundIcon="@drawable/houseicon"

@@ -22,9 +22,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.capstone_36team.MainActivity;
 import com.example.capstone_36team.R;
 import com.example.capstone_36team.RoomActivity;
 
@@ -101,6 +103,16 @@ public class HomeFragment extends Fragment {
 
 
     }
+
+    @Override //onResume 주기일때 타이틀 바꿔줌
+    public void onResume() {
+        super.onResume();
+        FragmentActivity activity = getActivity();
+        if (activity != null) {
+            ((MainActivity) activity).setActionBarTitle("Room");
+        }
+    }
+
     private void openDialog() { //dialog 관련 함수
 
         DialogFragment myDialogFragment = new dialogfragment();
