@@ -1,5 +1,6 @@
 package com.example.capstone_36team.ui.notifications;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -13,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.capstone_36team.LoginActivity;
+import com.example.capstone_36team.MainActivity;
 import com.example.capstone_36team.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -56,8 +58,8 @@ public class RevokeFragment extends DialogFragment {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            String cu = mAuth.getUid();
-                            userID.child(cu).removeValue();
+                            String cuid = ((LoginActivity)LoginActivity.context_login).cu;
+                            userID.child(cuid).removeValue();
                         }
                     }
                 });

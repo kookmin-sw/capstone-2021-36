@@ -3,6 +3,7 @@ package com.example.capstone_36team;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -40,15 +41,18 @@ public class LoginActivity extends AppCompatActivity {
     private final static int RC_SIGN_IN = 123;
     private FirebaseAuth mAuth;
     DatabaseReference mDatabase= FirebaseDatabase.getInstance().getReference(); // 22
-    DatabaseReference userID = mDatabase.child("UserDB"); // 22
-    String family_name = "family1"; //22
+    DatabaseReference userID = mDatabase.child("UserDB");
     HashMap<String, Object> childUpdates = null;
+    static public Context context_login;
+    static public String cu;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         mAuth=FirebaseAuth.getInstance();
+        context_login = this;
         CreateRequest();
 
         findViewById(R.id.bt_Login).setOnClickListener(new View.OnClickListener() {
@@ -113,7 +117,7 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            String cu = mAuth.getUid();
+                            cu = mAuth.getUid();
                             childUpdates = new HashMap<>();
 
 
