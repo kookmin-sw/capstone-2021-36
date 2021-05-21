@@ -19,7 +19,6 @@
         android:icon="@mipmap/ic_launcher"
 
         android:label="하우스피디아"
-
         android:networkSecurityConfig="@xml/network_config"
         android:roundIcon="@drawable/houseicon"
         android:supportsRtl="true"
