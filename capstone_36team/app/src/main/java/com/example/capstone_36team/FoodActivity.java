@@ -40,6 +40,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -112,6 +113,9 @@ public class FoodActivity extends AppCompatActivity {
     private Dialog dialog04;
     private Dialog dialog05;
     private Dialog dialog07;
+    private Dialog dialog07_1;
+    private Dialog dialog08;
+
     String name;
     String company;
     private static final int REQUEST_IMAGE_CAPTURE = 672;
@@ -128,12 +132,14 @@ public class FoodActivity extends AppCompatActivity {
     String Barcodedata ;
     String data;
     Button dateset;
+    String item;
     DatePickerDialog datePickerDialog;
 
     String date;
 
     private ListView flist;
     private String user_name = "testuid";
+    private String[] names = {"abc<가구1<방1", "ab2<가구2<방1"}; //////{"물품<장소", "물품<장소" "물품<장소"이런식으로 데이터가 들어왔음 좋겠습니다.}
 
 
 
@@ -174,6 +180,12 @@ public class FoodActivity extends AppCompatActivity {
         dialog07 = new Dialog(FoodActivity.this);       // Dialog 초기화
         dialog07.requestWindowFeature(Window.FEATURE_NO_TITLE); // 타이틀 제거
         dialog07.setContentView(R.layout.search_result);
+        dialog07_1 = new Dialog(FoodActivity.this);       // Dialog 초기화
+        dialog07_1.requestWindowFeature(Window.FEATURE_NO_TITLE); // 타이틀 제거
+        dialog07_1.setContentView(R.layout.auto_search_dialog);
+        dialog08 = new Dialog(FoodActivity.this);       // Dialog 초기화
+        dialog08.requestWindowFeature(Window.FEATURE_NO_TITLE); // 타이틀 제거
+        dialog08.setContentView(R.layout.plus_dialog_layout);
 
         notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE); // 하추
         alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE); // 하추
@@ -644,7 +656,7 @@ public class FoodActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_search:
-                showDialog03();
+                showDialog07_1();
 
                 return true;
             default:
@@ -676,87 +688,87 @@ public class FoodActivity extends AppCompatActivity {
 
     }
 
-    public void showDialog03(){ //다이얼로그 함수(검색)
-        dialog03.show(); // 다이얼로그 띄우기
-        dialog03.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        EditText edittext_searchname = dialog03.findViewById(R.id.edittext_searchname);
-
-
-        dialog03.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-
-        Button searchbutton = dialog03.findViewById(R.id.pbutton);
-
-        // *주의할 점: findViewById()를 쓸 때는 -> 앞에 반드시 다이얼로그 이름을 붙여야 한다.
-
-        searchbutton.setText("검색");
-
-        searchbutton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) { //검색 클릭했을때
-                Log.d("확인", "검색클릭됨");
-                Log.d("확인", "검색클릭됨");
-                // 원하는 기능 구현
-                ///////////////////////검색기능////////////////////
-                Editable search = edittext_searchname.getText();
-                //////////edittext에 입력한 문자의 경로를 query에 담습니다.//////
-                Query query = conditionRef.child(String.valueOf(search));
-                conditionRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                        if(!snapshot.hasChild(String.valueOf(search)))
-                            stringquery = "검색결과가 없습니다.";
-                        else{
-                            stringquery = String.valueOf(query);
-                            stringquery.replace("/%EB%AC%BC%ED%92%88%20%EC%9D%B4%EB%A6%84\n","");
-
-                            StringBuffer stringBufferquery = new StringBuffer(stringquery);
-
-                            stringBufferquery.replace(0,58,"");
-                            stringquery = String.valueOf(stringBufferquery);
-
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
-
-                    }
-                });
-
-
-
-
-                TextView text_search_result = dialog04.findViewById(R.id.text_search_result);
-                Button btn_search_result = dialog04.findViewById(R.id.btn_search_result);
-                text_search_result.setText(stringquery);
-                text_search_result.setTextSize(20);
-                dialog03.dismiss();
-                dialog04.show();
-                btn_search_result.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog04.dismiss();
-                    }
-                });
-
-
-
-
-
-            }
-        });
-        Button nosearchbutton = dialog03.findViewById(R.id.nbutton);
-        nosearchbutton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) { //취소 클릭했을때
-                Log.d("확인", "취소릭됨");
-                // 원하는 기능 구현
-                dialog03.dismiss();
-
-            }
-        });
-    }
+//    public void showDialog03(){ //다이얼로그 함수(검색)
+//        dialog03.show(); // 다이얼로그 띄우기
+//        dialog03.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//        EditText edittext_searchname = dialog03.findViewById(R.id.edittext_searchname);
+//
+//
+//        dialog03.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//
+//
+//        Button searchbutton = dialog03.findViewById(R.id.pbutton);
+//
+//        // *주의할 점: findViewById()를 쓸 때는 -> 앞에 반드시 다이얼로그 이름을 붙여야 한다.
+//
+//        searchbutton.setText("검색");
+//
+//        searchbutton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) { //검색 클릭했을때
+//                Log.d("확인", "검색클릭됨");
+//                Log.d("확인", "검색클릭됨");
+//                // 원하는 기능 구현
+//                ///////////////////////검색기능////////////////////
+//                Editable search = edittext_searchname.getText();
+//                //////////edittext에 입력한 문자의 경로를 query에 담습니다.//////
+//                Query query = conditionRef.child(String.valueOf(search));
+//                conditionRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+//                        if(!snapshot.hasChild(String.valueOf(search)))
+//                            stringquery = "검색결과가 없습니다.";
+//                        else{
+//                            stringquery = String.valueOf(query);
+//                            stringquery.replace("/%EB%AC%BC%ED%92%88%20%EC%9D%B4%EB%A6%84\n","");
+//
+//                            StringBuffer stringBufferquery = new StringBuffer(stringquery);
+//
+//                            stringBufferquery.replace(0,58,"");
+//                            stringquery = String.valueOf(stringBufferquery);
+//
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
+//
+//                    }
+//                });
+//
+//
+//
+//
+//                TextView text_search_result = dialog04.findViewById(R.id.text_search_result);
+//                Button btn_search_result = dialog04.findViewById(R.id.btn_search_result);
+//                text_search_result.setText(stringquery);
+//                text_search_result.setTextSize(20);
+//                dialog03.dismiss();
+//                dialog04.show();
+//                btn_search_result.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        dialog04.dismiss();
+//                    }
+//                });
+//
+//
+//
+//
+//
+//            }
+//        });
+//        Button nosearchbutton = dialog03.findViewById(R.id.nbutton);
+//        nosearchbutton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) { //취소 클릭했을때
+//                Log.d("확인", "취소릭됨");
+//                // 원하는 기능 구현
+//                dialog03.dismiss();
+//
+//            }
+//        });
+//    }
     public void showDialog06(){ //수동으로 입력 클릭하면 나오는다이얼로그 함수
         Button plus_button = dialog02.findViewById(R.id.plus_button);
         dialog02.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -820,6 +832,58 @@ public class FoodActivity extends AppCompatActivity {
             }
         });
     }
+    public void showDialog07_1(){  //자동완성 다이얼로그
+        dialog07_1.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        AutoCompleteTextView editText = dialog07_1.findViewById(R.id.actv);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, names);
+        editText.setAdapter(adapter);
+        dialog07_1.show();
+        editText.setText("");
+        editText.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                item = names[position];
+                int a = item.indexOf("<");
+                item = item.substring(0,a);
+
+                dialog07_1.dismiss();
+                showDialog08();
+            }
+        });
+
+
+    }
+    public void showDialog08(){
+        initDatePicker();
+        dateset = (Button)dialog08.findViewById(R.id.dateset);
+        dateset.setText(getTodaysDate());
+        dialog08.show();
+        dialog08.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        EditText editText = dialog08.findViewById(R.id.fnameInput);
+        ////@@@@@@@@@@@@@@@@@@@@@@@@@@@///DB를 가져와서, 모든정보 다이얼로그에 띄워주기//////@@@@@@@@@@@@@@@@@@@@@//
+
+        editText.setText(item);//////////.....상세장소,,,유통기한까지////////////setText로 띄워주기
+        Button button1 = dialog08.findViewById(R.id.plus_button);
+        Button button2 = dialog08.findViewById(R.id.no_plus_button);
+        button1.setText("변경");
+        button1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /////////////////////////////////'@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@////////-> 변경사항은 저장해주기
+                dialog08.dismiss();
+                Toast.makeText(FoodActivity.this,"변경사항이 저장되었습니다.", Toast.LENGTH_SHORT).show();
+            }
+        });
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog08.dismiss();
+            }
+        });
+
+
+    }
+
 
 
 
