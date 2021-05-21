@@ -205,7 +205,7 @@ public class DashboardFragment extends Fragment {
         super.onResume();
         FragmentActivity activity = getActivity();
         if (activity != null) {
-            ((MainActivity) activity).setActionBarTitle("Room");
+            ((MainActivity) activity).setActionBarTitle("Food");
         }
     }
 

@@ -109,7 +109,7 @@ public class HomeFragment extends Fragment {
         super.onResume();
         FragmentActivity activity = getActivity();
         if (activity != null) {
-            ((MainActivity) activity).setActionBarTitle("Food");
+            ((MainActivity) activity).setActionBarTitle("Room");
         }
     }
 

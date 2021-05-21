@@ -338,6 +338,7 @@ public class RoomActivity extends AppCompatActivity {
                             stringBufferquery.replace(0,58,"");
                             stringquery = String.valueOf(stringBufferquery);
 
+
                         }
                     }
 
