@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.FileProvider;
+import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -116,6 +117,8 @@ public class FoodActivity extends AppCompatActivity {
     private Dialog dialog07_1;
     private Dialog dialog08;
 
+
+    String category;
     String name;
     String company;
     private static final int REQUEST_IMAGE_CAPTURE = 672;
@@ -160,8 +163,6 @@ public class FoodActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_food);
         ListView flist = (ListView)findViewById(R.id.listview_food2);
-
-
 
 
         btn_add_food = (Button)findViewById(R.id.btn_add_food);
@@ -215,12 +216,11 @@ public class FoodActivity extends AppCompatActivity {
         Intent refnameIntent = getIntent();
         String fridgename = refnameIntent.getStringExtra("fridgename");
 
-
+        category = refnameIntent.getStringExtra("category");
         user_name = refnameIntent.getStringExtra("userid");
         familyname = refnameIntent.getStringExtra("familyid");
         conditionRef = mDatabase.child("HomeDB").child(familyname).child("fridgelist").child(fridgename).child("foodlist");
         //DatabaseReference userRef = mDatabase.child("UserDB").child(user_name);
-
         conditionRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -308,6 +308,13 @@ public class FoodActivity extends AppCompatActivity {
                 showDialog01();
             }
         });
+    }
+
+    @Override //onResume 주기일때 타이틀 바꿔줌
+    public void onResume() {
+        super.onResume();
+
+        getSupportActionBar().setTitle(category);
     }
 
 //    public void mkChildEventListener(ArrayAdapter<String> adapter){

@@ -79,6 +79,7 @@ public class HomeFragment extends Fragment {
                 String category = LIST_MENU[position];
 
                 Intent intent = new Intent(getActivity(), RoomActivity.class);
+                intent.putExtra("category",category);
                 startActivity(intent);
 
             }

@@ -59,15 +59,22 @@ public class RoomActivity extends AppCompatActivity {
     DatabaseReference conditionRef = mDatabase.child("HomeDB").child(family_name).child("room1");
     private String[] names = {"abc<가구1<방1", "ab2<가구2<방1"}; //////{"물품<장소", "물품<장소" "물품<장소"이런식으로 데이터가 들어왔음 좋겠습니다.}
     String item;
+    String category;
 
 
 
 
-
+    private void tostMsg1() {
+        Toast.makeText(this,"ㅇㅇ"+category,Toast.LENGTH_SHORT).show();
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_room);
+        Intent RoomnameIntent = getIntent();
+        category = RoomnameIntent.getStringExtra("category");
+        getSupportActionBar().setTitle(category);
+
 
         image = (ImageView) findViewById(R.id.image);
         image2 = (ImageView) findViewById(R.id.image2);
