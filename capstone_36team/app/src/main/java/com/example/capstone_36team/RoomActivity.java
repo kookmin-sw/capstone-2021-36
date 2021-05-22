@@ -403,6 +403,7 @@ public class RoomActivity extends AppCompatActivity {
         emdfhr = true;
 
         Button searchbutton = dialog03.findViewById(R.id.pbutton);
+        Button searchbutton2 = dialog03.findViewById(R.id.nbutton);
         searchbutton.setText("등록");
         // *주의할 점: findViewById()를 쓸 때는 -> 앞에 반드시 다이얼로그 이름을 붙여야 한다.
 
@@ -410,72 +411,22 @@ public class RoomActivity extends AppCompatActivity {
 
         searchbutton.setOnClickListener(new View.OnClickListener() {
             @Override
-<<<<<<< HEAD
-            public void onClick(View view) { //등록 클릭했을때
-=======
-            public void onClick(View view) { //검색 클릭했을때
-                Log.d("확인", "검색클릭됨");
-                Log.d("확인", "검색클릭됨");
-                // 원하는 기능 구현
-                ///////////////////////검색기능////////////////////
-                Editable search = edittext_searchname.getText();
-                //////////edittext에 입력한 문자의 경로를 query에 담습니다.//////
-                Query query = conditionRef.child(String.valueOf(search));
-                conditionRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                        if(!snapshot.hasChild(String.valueOf(search)))
-                            stringquery = "검색결과가 없습니다.";
-                        else{
-                            stringquery = String.valueOf(query);
-                            stringquery.replace("/%EB%AC%BC%ED%92%88%20%EC%9D%B4%EB%A6%84\n","");
-
-                            StringBuffer stringBufferquery = new StringBuffer(stringquery);
-
-                            stringBufferquery.replace(0,58,"");
-                            stringquery = String.valueOf(stringBufferquery);
-
-
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
-
-                    }
-                });
-
-
-
->>>>>>> c8b1882be3a65fc113a3cd84d38a207aba520677
-
-                Button btn_search_result = dialog04.findViewById(R.id.btn_search_result);
-
+            public void onClick(View v) {
+                ////////////////////////////////////////DB///////////////////////////////등록
                 dialog03.dismiss();
-
-                btn_search_result.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog04.dismiss();
-                    }
-                });
-
-
-
-
-
             }
         });
-        Button nosearchbutton = dialog03.findViewById(R.id.nbutton);
-        nosearchbutton.setOnClickListener(new View.OnClickListener() {
+
+        searchbutton2.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) { //취소 클릭했을때
-                Log.d("확인", "취소릭됨");
-                // 원하는 기능 구현
+            public void onClick(View v) {
                 dialog03.dismiss();
-
             }
         });
+
+
+
+
     }
     public void showDialog07(){  //자동완성 다이얼로그
         dialog07.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
