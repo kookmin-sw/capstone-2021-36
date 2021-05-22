@@ -138,13 +138,12 @@ public class FoodActivity extends AppCompatActivity {
     String date;
 
     private ListView flist;
-<<<<<<< HEAD
+
     private String user_name = "testuid";
     private String[] names = {"abc<가구1<방1", "ab2<가구2<방1"}; //////{"물품<장소", "물품<장소" "물품<장소"이런식으로 데이터가 들어왔음 좋겠습니다.}
-=======
-    private String user_name;
+
     private String familyname;
->>>>>>> c8b1882be3a65fc113a3cd84d38a207aba520677
+
 
 
 
