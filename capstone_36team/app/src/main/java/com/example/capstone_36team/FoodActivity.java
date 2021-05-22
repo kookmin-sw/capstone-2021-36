@@ -164,7 +164,6 @@ public class FoodActivity extends AppCompatActivity {
         setContentView(R.layout.activity_food);
         ListView flist = (ListView)findViewById(R.id.listview_food2);
 
-
         btn_add_food = (Button)findViewById(R.id.btn_add_food);
         dilaog01 = new Dialog(FoodActivity.this);       // Dialog 초기화
         dilaog01.requestWindowFeature(Window.FEATURE_NO_TITLE); // 타이틀 제거

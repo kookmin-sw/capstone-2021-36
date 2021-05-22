@@ -241,6 +241,7 @@ public class RoomActivity extends AppCompatActivity {
                         public void onClick(View v) {
 
                             Intent intent = new Intent(getApplicationContext(), FurnitureActivity.class);
+                            intent.putExtra("itemname",item);
                             startActivity(intent);
                             Log.d("확인 ", "클릭됨");
 
@@ -445,9 +446,11 @@ public class RoomActivity extends AppCompatActivity {
         editText.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
                 item = names[position];
                 int a = item.indexOf("<");
                 item = item.substring(0,a);
+
 
                 dialog07.dismiss();
                 showDialog08();

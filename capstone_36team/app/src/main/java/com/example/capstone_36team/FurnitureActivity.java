@@ -56,6 +56,7 @@ public class FurnitureActivity extends AppCompatActivity {
     String name;
     String company;
     String key = "593cd6a3496d4e1194ff";
+    String itemname;
 
     private Button modify;
     private Dialog dialog02;
@@ -80,7 +81,9 @@ public class FurnitureActivity extends AppCompatActivity {
         dialog05.requestWindowFeature(Window.FEATURE_NO_TITLE); // 타이틀 제거
         dialog05.setContentView(R.layout.plus_dialog_layout_nofood);
 
-
+        Intent ItemIntent = getIntent();
+        itemname = ItemIntent.getStringExtra("itemname");
+        getSupportActionBar().setTitle(itemname);
 
 
 
