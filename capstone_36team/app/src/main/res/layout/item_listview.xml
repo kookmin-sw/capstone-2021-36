@@ -35,17 +35,29 @@
 
     <Button
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="70dp"
         android:text="수정"
+
+        android:background="@drawable/rounded_corner_blue"
         android:layout_weight="20"
         android:id="@+id/modify"
+        android:layout_gravity="center"
+        android:textStyle="bold"
+
+        />
+    <View
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="5"
         />
     <Button
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="70dp"
         android:text="삭제"
         android:layout_weight="20"
         android:id="@+id/delete"
+        android:background="@drawable/rounded_corner_blue"
+        android:layout_gravity="center"
         />
 
     <View
