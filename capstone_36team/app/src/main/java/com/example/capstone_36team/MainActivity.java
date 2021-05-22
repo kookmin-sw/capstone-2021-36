@@ -1,6 +1,8 @@
 package com.example.capstone_36team;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
@@ -18,6 +20,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import static android.icu.text.DisplayContext.LENGTH_SHORT;
+import static androidx.core.view.ViewCompat.setBackground;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -37,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         navView.setOnClickMenuListener(new MeowBottomNavigation.ClickListener() {
             @Override
             public void onClickItem(MeowBottomNavigation.Model item) {
+
             }
         });
 
@@ -48,18 +52,25 @@ public class MainActivity extends AppCompatActivity {
                 switch (item.getId()){
                     case 1:
                         fragment = new HomeFragment();
+                        LinearLayout layout = (LinearLayout)findViewById(R.id.container);
+                        layout.setBackgroundResource(R.drawable.funitureimage);
                         break;
 
                     case 2:
                         fragment = new DashboardFragment();
+                        LinearLayout layout2 = (LinearLayout)findViewById(R.id.container);
+                        layout2.setBackgroundResource(R.drawable.refrimage);
                         break;
 
                     case 3:
                         fragment = new NotificationsFragment();
+                        LinearLayout layout3 = (LinearLayout)findViewById(R.id.container);
+                        layout3.setBackgroundResource(R.drawable.infoimage);
                         break;
                 }
 
                 loadFragment(fragment);
+
 
             }
         });
@@ -72,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
                 .beginTransaction()
                 .replace(R.id.nav_host_fragment,fragment)
                 .commit();
+
     }
 
     public void setActionBarTitle(String title) {

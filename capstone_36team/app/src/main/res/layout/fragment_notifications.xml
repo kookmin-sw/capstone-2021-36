@@ -7,18 +7,18 @@
     tools:context=".ui.notifications.NotificationsFragment">
 
     <TextView
-        android:id="@+id/text_notifications"
+        android:id="@+id/family_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="148dp"
         android:layout_marginEnd="8dp"
         android:textAlignment="center"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/id_Email" />
 
     <ImageView
         android:id="@+id/image_Google"
@@ -36,6 +36,8 @@
         android:layout_marginStart="144dp"
         android:layout_marginTop="32dp"
         android:text="닉네임"
+        android:textSize="20dp"
+        android:textColor="@color/colorLightblue"
         app:layout_constraintStart_toEndOf="@+id/image_Google"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
@@ -47,52 +49,56 @@
         android:layout_marginStart="144dp"
         android:layout_marginTop="8dp"
         android:text="이메일"
+        android:textSize="20dp"
+        android:textColor="@color/colorLightblue"
         app:layout_constraintStart_toEndOf="@+id/image_Google"
         app:layout_constraintTop_toBottomOf="@+id/id_Nname"
         tools:ignore="MissingConstraints" />
 
 
-    <Button
+    <android.widget.Button
         android:id="@+id/bt_Logout"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="48dp"
+        android:layout_marginEnd="108dp"
+        android:layout_marginBottom="32dp"
+        android:background="@drawable/basic_button"
         android:text="로그아웃"
-
-        app:layout_constraintBottom_toTopOf="@+id/bt_Partin"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.212"
+        android:textColor="@color/colorLightblue"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/bt_Revoke"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/id_Email"
-        app:layout_constraintVertical_bias="0.536"
+        app:layout_constraintTop_toBottomOf="@+id/family_view"
+        app:layout_constraintVertical_bias="1.0"
         tools:ignore="MissingConstraints" />
 
-
-    <Button
+    <android.widget.Button
         android:id="@+id/bt_Revoke"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="48dp"
+        android:layout_marginBottom="32dp"
+        android:background="@drawable/basic_button"
         android:text="회원탈퇴"
-
-        app:layout_constraintBottom_toTopOf="@+id/bt_Partin"
+        android:textColor="@color/colorLightblue"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.781"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/id_Email"
-        app:layout_constraintVertical_bias="0.536"
+        app:layout_constraintTop_toBottomOf="@+id/family_view"
+        app:layout_constraintVertical_bias="1.0"
         tools:ignore="MissingConstraints" />
 
-    <Button
+    <android.widget.Button
         android:id="@+id/bt_Partin"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="284dp"
+        android:layout_marginBottom="32dp"
+        android:background="@drawable/basic_button"
         android:text="가족참여"
-
-        app:layout_constraintBottom_toTopOf="@+id/text_notifications"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
+        android:textColor="@color/colorLightblue"
+        app:layout_constraintBottom_toTopOf="@+id/family_view"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/id_Email"
-        app:layout_constraintVertical_bias="0.843"
         tools:ignore="MissingConstraints" />
 
 
