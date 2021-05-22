@@ -2,6 +2,7 @@ package com.example.capstone_36team;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.app.Dialog;
 import android.content.ClipData;
@@ -15,6 +16,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.util.Log;
 import android.view.DragEvent;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -130,8 +132,6 @@ public class RoomActivity extends AppCompatActivity {
         float image10_y = (float) 1422.0;
         float image9_x = (float) 772.0;
         float image9_y = (float) 1615.0;
-
-
 
 
 
