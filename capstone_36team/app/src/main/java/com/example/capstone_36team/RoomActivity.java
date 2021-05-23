@@ -28,6 +28,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -62,8 +63,8 @@ public class RoomActivity extends AppCompatActivity {
     private String[] names = {"abc<가구1<방1", "ab2<가구2<방1"}; //////{"물품<장소", "물품<장소" "물품<장소"이런식으로 데이터가 들어왔음 좋겠습니다.}
     String item;
     String category;
-
-
+    GridLayout g;
+    int h;
 
 
     private void tostMsg1() {
@@ -105,7 +106,7 @@ public class RoomActivity extends AppCompatActivity {
         dialog08.setContentView(R.layout.plus_dialog_layout_nofood);
 
 
-
+        g = findViewById(R.id.g);
 
 
 
@@ -174,6 +175,13 @@ public class RoomActivity extends AppCompatActivity {
 
 
     }
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        h = g.getHeight();
+        Log.d("헬로", String.valueOf(h));
+
+    }
     private final class MyTouchListener implements View.OnTouchListener {
         private View view;
         private float startXvalue;
@@ -211,8 +219,9 @@ public class RoomActivity extends AppCompatActivity {
 
             }else if(motionEvent.getAction() == MotionEvent.ACTION_UP){
                 Log.d("확인좀", String.valueOf(startYvalue));
-                if (startYvalue >= 1417)
+                if (startYvalue >= h * (1417/1808))
                     showDialog06();
+
                 // 뷰에서 손을 뗌
                 this.first = false;
 
@@ -403,6 +412,10 @@ public class RoomActivity extends AppCompatActivity {
 //            }
 //        });
 //    }
+
+
+
+
     public void showDialog06(){ //다이얼로그 함수(검색)
         dialog03.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog03.show(); // 다이얼로그 띄우기
@@ -486,6 +499,7 @@ public class RoomActivity extends AppCompatActivity {
 
 
     }
+
 
 
 
