@@ -39,4 +39,18 @@ public class Room {
         }
         return null;
     };
+    public void updateProduct(String key, String name, String placedetail, int count){
+        for(int i=0;i<Plist.size();i++){
+            Product ptemp = Plist.get(i);
+            String str = ptemp.getId();
+            if(str.equals(key)){
+                ptemp.setName(name);
+                ptemp.setPlacedetail(placedetail);
+                ptemp.setCount(count);
+            };
+        }
+    }
+    public Product getProductByIndex(int index){
+        return Plist.get(index);
+    }
 }
