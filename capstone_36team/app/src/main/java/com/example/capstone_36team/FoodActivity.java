@@ -95,6 +95,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -147,7 +148,7 @@ public class FoodActivity extends AppCompatActivity {
 
     private String familyname;
     Room Fridge;
-
+    UUID newUID;
 
 
 
@@ -655,8 +656,10 @@ public class FoodActivity extends AppCompatActivity {
                 taskMap.put("count", fcount);
                 taskMap.put("placedetail", f_detail_place);
 
+                newUID = UUID.randomUUID();
+                String nfoodid = newUID.toString();
 
-                conditionRef.child(foodname).setValue(taskMap);
+                conditionRef.child(nfoodid).setValue(taskMap);
                 //conditionRef = mDatabase.child("HomeDB").child("family2").child("Fridge");
                 Log.d("확인", foodname);
 

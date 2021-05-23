@@ -43,6 +43,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 
 public class DashboardFragment extends Fragment {
@@ -260,7 +261,7 @@ public class DashboardFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             String newroomname = data.getStringExtra("roomname");
-            String refridgeid = "fridge2";
+            String refridgeid = UUID.randomUUID().toString();
             Map<String, Object> taskMap = new HashMap<String, Object>();
             taskMap.put("fridgename", newroomname);
 
