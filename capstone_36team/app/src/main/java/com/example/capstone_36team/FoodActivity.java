@@ -654,7 +654,6 @@ public class FoodActivity extends AppCompatActivity {
                 taskMap.put("name", foodname);
                 taskMap.put("count", fcount);
                 taskMap.put("placedetail", f_detail_place);
-                setAlarm();
 
 
                 conditionRef.child(foodname).setValue(taskMap);
@@ -856,6 +855,7 @@ public class FoodActivity extends AppCompatActivity {
                 ctaskMap.put("placedetail", newf_detail_place);
                 //conditionRef.updateChildren(ctaskMap);
                 conditionRef.child(fid).updateChildren(ctaskMap);
+                setAlarm();
                 dialog02.dismiss(); // 다이얼로그 닫기
                 ////////////////////////////////////EditText에 적은것 DB에 반영/////////////////////////////////
 
