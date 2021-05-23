@@ -1,5 +1,6 @@
 package com.example.capstone_36team.ui.home;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -26,9 +27,19 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.capstone_36team.GlobalVariable;
 import com.example.capstone_36team.MainActivity;
 import com.example.capstone_36team.R;
 import com.example.capstone_36team.RoomActivity;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 import static android.view.Gravity.CENTER;
 
@@ -39,6 +50,13 @@ public class HomeFragment extends Fragment {
     private Dialog dialog04;
     private String category;
     private Dialog dialog03;
+    private String userid;
+    private String familyid;
+    DatabaseReference mDatabase= FirebaseDatabase.getInstance().getReference();
+    //DatabaseReference userRef = mDatabase.child("UserDB").child(userid);
+    DatabaseReference conditionRef;
+    HashMap<String, String> fridgemap = new HashMap<String, String>();
+    GlobalVariable familydata;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -53,6 +71,10 @@ public class HomeFragment extends Fragment {
         dialog03 = new Dialog(getActivity());       // Dialog 초기화
         dialog03.requestWindowFeature(Window.FEATURE_NO_TITLE); // 타이틀 제거
         dialog03.setContentView(R.layout.search_result);
+        familydata = (GlobalVariable)getActivity().getApplicationContext();
+        userid = familydata.getuId();
+        familyid = familydata.getfamilyId();
+        conditionRef = mDatabase.child("HomeDB").child(familyid).child("roomlist");
         btn_add_place.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,25 +91,63 @@ public class HomeFragment extends Fragment {
 
             }
         });
-        final String[] LIST_MENU = {"방1", "방2", "방3"} ; //데이터 담는 부분
-        ArrayAdapter<String> listViewAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, LIST_MENU);
+        //final String[] LIST_MENU = {"방1", "방2", "방3"} ; //데이터 담는 부분
+        ArrayAdapter<String>listViewAdapter = new ArrayAdapter<String>(
+                getActivity(),
+                android.R.layout.simple_list_item_1,
+                android.R.id.text1
+        );
         final ListView listview = root.findViewById(R.id.listview_place);
         listview.setAdapter(listViewAdapter);
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() { //리스트뷰 클릭시
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String category = LIST_MENU[position];
+                String category = fridgemap.get((String)parent.getItemAtPosition(position));
 
                 Intent intent = new Intent(getActivity(), RoomActivity.class);
                 intent.putExtra("category",category);
+                intent.putExtra("userid",userid);
+                intent.putExtra("familyid", familyid);
                 startActivity(intent);
 
             }
         });
+
+        conditionRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                String fridgename = dataSnapshot.child("roomname").getValue(String.class);
+                listViewAdapter.add(fridgename);
+                fridgemap.put(fridgename, dataSnapshot.getKey());
+
+                Log.d("MainActivity", "ChildEventListener - onChildChanged : ");
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                Log.d("MainActivity", "ChildEventListener - onChildChanged : " + dataSnapshot);
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                Log.d("MainActivity", "ChildEventListener - onChildRemoved : " + dataSnapshot.getKey());
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                Log.d("MainActivity", "ChildEventListener - onChildMoved" + s);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.d("MainActivity", "ChildEventListener - onCancelled" + databaseError.getMessage());
+            }
+        });
+
         listview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                category = LIST_MENU[position];
+                category = fridgemap.get((String)parent.getItemAtPosition(position));
                 Toast.makeText(getActivity(), category, Toast.LENGTH_SHORT).show();
 
                 showDialog04();
@@ -122,6 +182,19 @@ public class HomeFragment extends Fragment {
 
         myDialogFragment.show(getFragmentManager(), "Search Filter");
 
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            String newroomname = data.getStringExtra("roomname");
+            String refridgeid = UUID.randomUUID().toString();
+            Map<String, Object> taskMap = new HashMap<String, Object>();
+            taskMap.put("roomname", newroomname);
+
+
+            conditionRef.child(refridgeid).setValue(taskMap);
+        }
     }
 
     public void showDialog04(){ //다이얼로그 함수

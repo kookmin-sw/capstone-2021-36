@@ -34,6 +34,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -42,6 +43,10 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 
 public class RoomActivity extends AppCompatActivity {
@@ -57,9 +62,18 @@ public class RoomActivity extends AppCompatActivity {
     private String stringquery;
     private boolean emdfhr = false;
     private static  final String IMAGEVIEW_TAG = "드래그 이미지";
-    private String family_name = "family1";
+    private String userid;
+    private String familyid;
+    UUID newUID;
     DatabaseReference mDatabase= FirebaseDatabase.getInstance().getReference();
-    DatabaseReference conditionRef = mDatabase.child("HomeDB").child(family_name).child("room1");
+    //DatabaseReference userRef = mDatabase.child("UserDB").child(userid);
+    DatabaseReference conditionRef;
+//    HashMap<String, String> fridgemap = new HashMap<String, String>();
+//    GlobalVariable familydata;
+
+    //    private String family_name = "family1";
+//    DatabaseReference mDatabase= FirebaseDatabase.getInstance().getReference();
+//    DatabaseReference conditionRef = mDatabase.child("HomeDB").child(family_name).child("room1");
     private String[] names = {"abc<가구1<방1", "ab2<가구2<방1"}; //////{"물품<장소", "물품<장소" "물품<장소"이런식으로 데이터가 들어왔음 좋겠습니다.}
     String item;
     String category;
@@ -107,6 +121,55 @@ public class RoomActivity extends AppCompatActivity {
 
 
         g = findViewById(R.id.g);
+
+        Intent refnameIntent = getIntent();
+        String fridgename = refnameIntent.getStringExtra("fridgename");
+        //Fridge = new Room(fridgename);
+
+        category = refnameIntent.getStringExtra("category");
+        //user_name = refnameIntent.getStringExtra("userid");
+        familyid = refnameIntent.getStringExtra("familyid");
+        conditionRef = mDatabase.child("HomeDB").child(familyid).child("roomlist").child(category).child("furniturelist");
+
+
+        conditionRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                String fridgename = dataSnapshot.child("furniturename").getValue(String.class);
+                //ImageView newimage = <- 여기서 새 이미지 생성.
+                //newimage.setX(dataSnapshot.child("xpos").getValue(float.class));
+                //newimage.setY(dataSnapshot.child("ypos").getValue(float.class));
+                image2.setX(dataSnapshot.child("xpos").getValue(float.class));
+                image2.setY(dataSnapshot.child("ypos").getValue(float.class));
+
+                //fridgemap.put(fridgename, dataSnapshot.getKey());
+                Log.d("MainActivity", "ChildEventListener - onChildChanged : ");
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                String fridgename = dataSnapshot.child("furniturename").getValue(String.class);
+                //newimage.setX(dataSnapshot.child("xpos").getValue(float.class));
+                //newimage.setY(dataSnapshot.child("ypos").getValue(float.class));
+                image2.setX(dataSnapshot.child("xpos").getValue(float.class));
+                image2.setY(dataSnapshot.child("ypos").getValue(float.class));
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                Log.d("MainActivity", "ChildEventListener - onChildRemoved : " + dataSnapshot.getKey());
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                Log.d("MainActivity", "ChildEventListener - onChildMoved" + s);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.d("MainActivity", "ChildEventListener - onCancelled" + databaseError.getMessage());
+            }
+        });
 
 
 
@@ -220,7 +283,7 @@ public class RoomActivity extends AppCompatActivity {
             }else if(motionEvent.getAction() == MotionEvent.ACTION_UP){
                 Log.d("확인좀", String.valueOf(startYvalue));
                 if (startYvalue >= h * (1417/1808))
-                    showDialog06();
+                    showDialog06(v.getX(), v.getY());
 
                 // 뷰에서 손을 뗌
                 this.first = false;
@@ -250,7 +313,9 @@ public class RoomActivity extends AppCompatActivity {
                         public void onClick(View v) {
 
                             Intent intent = new Intent(getApplicationContext(), FurnitureActivity.class);
-                            intent.putExtra("itemname",item);
+                            intent.putExtra("furnitureid", newUID);
+                            intent.putExtra("category",category);
+                            intent.putExtra("familyid", familyid);
                             startActivity(intent);
                             Log.d("확인 ", "클릭됨");
 
@@ -416,7 +481,7 @@ public class RoomActivity extends AppCompatActivity {
 
 
 
-    public void showDialog06(){ //다이얼로그 함수(검색)
+    public void showDialog06(float xpos, float ypos){ //다이얼로그 함수(검색)
         dialog03.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog03.show(); // 다이얼로그 띄우기
         EditText edittext_searchname = dialog03.findViewById(R.id.edittext_searchname);
@@ -433,6 +498,17 @@ public class RoomActivity extends AppCompatActivity {
         searchbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //EditText fnameinput = (EditText)dialog03.findViewById(R.id.edittext_searchname);
+                String furniturename = edittext_searchname.getText().toString();
+                Map<String, Object> taskMap = new HashMap<String, Object>();
+                taskMap.put("furniturename", furniturename);
+                taskMap.put("xpos", xpos);
+                taskMap.put("ypos", ypos);
+                taskMap.put("type", ""); // <- 여기 이미지 타입 추가.
+                newUID = UUID.randomUUID();
+                String nfoodid = newUID.toString();
+
+                conditionRef.child(nfoodid).setValue(taskMap);
                 ////////////////////////////////////////DB///////////////////////////////등록
                 dialog03.dismiss();
             }
