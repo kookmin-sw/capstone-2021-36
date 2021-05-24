@@ -81,6 +81,8 @@ public class FurnitureActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_furniture);
+        getSupportActionBar().setTitle("Room");
+
         dilaog01 = new Dialog(FurnitureActivity.this);
         dilaog01.requestWindowFeature(Window.FEATURE_NO_TITLE); // 타이틀 제거
         dilaog01.setContentView(R.layout.barcodeorcustom);

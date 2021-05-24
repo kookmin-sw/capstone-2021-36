@@ -91,7 +91,7 @@ public class RoomActivity extends AppCompatActivity {
         setContentView(R.layout.activity_room);
         Intent RoomnameIntent = getIntent();
         category = RoomnameIntent.getStringExtra("category");
-        getSupportActionBar().setTitle(category);
+        getSupportActionBar().setTitle("Room");
 
 
         image = (ImageView) findViewById(R.id.image);
@@ -127,7 +127,6 @@ public class RoomActivity extends AppCompatActivity {
         String fridgename = refnameIntent.getStringExtra("fridgename");
         //Fridge = new Room(fridgename);
 
-        category = refnameIntent.getStringExtra("category");
         //user_name = refnameIntent.getStringExtra("userid");
         familyid = refnameIntent.getStringExtra("familyid");
         conditionRef = mDatabase.child("HomeDB").child(familyid).child("roomlist").child(category).child("furniturelist");
