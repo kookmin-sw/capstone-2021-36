@@ -148,7 +148,7 @@ public class FurnitureActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                showdialog06();
+                showdialog06(position);
             }
         });
 
@@ -176,7 +176,7 @@ public class FurnitureActivity extends AppCompatActivity {
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                //adapter.remove(dataSnapshot.getKey());
+                adapter.remove(dataSnapshot.getKey());
                 Furniture.delProduct(dataSnapshot.child("name").getValue(String.class));
                 Log.d("MainActivity", "ChildEventListener - onChildRemoved : " + dataSnapshot.getKey());
             }
@@ -219,6 +219,7 @@ public class FurnitureActivity extends AppCompatActivity {
                 Log.d("확인", "수동으로 등록 클릭됨");
                 // 원하는 기능 구현
                 showDialog02();
+                dilaog01.dismiss();
 
 
             }
@@ -494,7 +495,7 @@ public class FurnitureActivity extends AppCompatActivity {
             return null;
         return nValue.getNodeValue();
     }
-    public void showdialog06(){
+    public void showdialog06(int index){
         dialog06.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
 
@@ -502,12 +503,25 @@ public class FurnitureActivity extends AppCompatActivity {
         EditText fnameinput = (EditText)dialog06.findViewById(R.id.fnameInput2);
         EditText fposinput = (EditText)dialog06.findViewById(R.id.fposInput2);
         EditText fcountinput = (EditText)dialog06.findViewById(R.id.fcountInput2);
+        fnameinput.setText(Furniture.getProductByIndex(index).getName());
+        fposinput.setText(Furniture.getProductByIndex(index).getDetailPlace());
+        fcountinput.setText(String.valueOf(Furniture.getProductByIndex(index).getCount()));
         Button button = (Button)dialog06.findViewById(R.id.plus_button2);
         button.setText("변경");
+        String fid = Furniture.getProductByIndex(index).getId();
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) { //변경버튼 클릭했을떄
-
+                String newfoodname = fnameinput.getText().toString();
+                String newf_detail_place = fposinput.getText().toString();
+                int newfcount = Integer.parseInt(fcountinput.getText().toString());
+                Map<String, Object> ctaskMap = new HashMap<String, Object>();
+                ctaskMap.put("name", newfoodname);
+                ctaskMap.put("count", newfcount);
+                ctaskMap.put("placedetail", newf_detail_place);
+                //conditionRef.updateChildren(ctaskMap);
+                conditionRef.child(fid).updateChildren(ctaskMap);
+                dialog06.dismiss();
             }
         });
         Button button1 = (Button)dialog06.findViewById(R.id.no_plus_button2) ;
@@ -515,6 +529,8 @@ public class FurnitureActivity extends AppCompatActivity {
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                conditionRef.child(fid).setValue(null);
+                dialog06.dismiss();
                 // 삭제버튼 클릭했을떄
             }
         });
