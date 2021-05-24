@@ -1,6 +1,8 @@
 package com.example.capstone_36team.ui.notifications;
 
 import android.app.Dialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -36,6 +38,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.HashMap;
 import java.util.Map;
 
+import static android.content.Context.CLIPBOARD_SERVICE;
+
 public class NotificationsFragment extends Fragment {
     private Button btn_partin;
     TextView name;
@@ -43,6 +47,7 @@ public class NotificationsFragment extends Fragment {
     ImageView image;
     Button signOut;
     Button revoke;
+    Button familyCode;
 
     private NotificationsViewModel notificationsViewModel;
     private Dialog dialog03;
@@ -63,6 +68,7 @@ public class NotificationsFragment extends Fragment {
         image = root.findViewById(R.id.image_Google);
         signOut= root.findViewById(R.id.bt_Logout);
         revoke = root.findViewById(R.id.bt_Revoke);
+        familyCode = root.findViewById(R.id.bt_FamilyCode);
         familydata = (GlobalVariable)getActivity().getApplicationContext();
         uid = familydata.getuId();
         conditionRef = mDatabase.child("UserDB").child(uid);
@@ -82,6 +88,17 @@ public class NotificationsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 showDialog03();
+
+            }
+        });
+
+        familyCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("가족 코드", familydata.getfamilyId());
+                clipboard.setPrimaryClip(clip);
+                openFamilyCodeFrag();
 
             }
         });
@@ -164,5 +181,14 @@ public class NotificationsFragment extends Fragment {
         rvk.show(getFragmentManager(), "revoke");
 
     }
+
+    private void openFamilyCodeFrag() { //dialog 관련 함수
+
+        FamilyCodeFragment fc = new FamilyCodeFragment();
+        fc.setTargetFragment(this, 0);
+        fc.show(getFragmentManager(), "familyCode");
+
+    }
+
 
 }
