@@ -105,6 +105,7 @@ public class HomeFragment extends Fragment {
                 String category = fridgemap.get((String)parent.getItemAtPosition(position));
 
                 Intent intent = new Intent(getActivity(), RoomActivity.class);
+                intent.putExtra("category",category);
                 intent.putExtra("userid",userid);
                 intent.putExtra("familyid", familyid);
                 startActivity(intent);

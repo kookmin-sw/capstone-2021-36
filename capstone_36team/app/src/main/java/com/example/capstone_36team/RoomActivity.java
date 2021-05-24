@@ -126,7 +126,7 @@ public class RoomActivity extends AppCompatActivity {
         Intent refnameIntent = getIntent();
         String fridgename = refnameIntent.getStringExtra("fridgename");
         //Fridge = new Room(fridgename);
-
+        category = refnameIntent.getStringExtra("category");
         //user_name = refnameIntent.getStringExtra("userid");
         familyid = refnameIntent.getStringExtra("familyid");
         conditionRef = mDatabase.child("HomeDB").child(familyid).child("roomlist").child(category).child("furniturelist");
