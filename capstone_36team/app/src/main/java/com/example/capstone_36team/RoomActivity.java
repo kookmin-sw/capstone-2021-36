@@ -65,6 +65,7 @@ public class RoomActivity extends AppCompatActivity {
     private String userid;
     private String familyid;
     UUID newUID;
+    String absoluteid;
     DatabaseReference mDatabase= FirebaseDatabase.getInstance().getReference();
     //DatabaseReference userRef = mDatabase.child("UserDB").child(userid);
     DatabaseReference conditionRef;
@@ -139,6 +140,7 @@ public class RoomActivity extends AppCompatActivity {
                 //ImageView newimage = <- 여기서 새 이미지 생성.
                 //newimage.setX(dataSnapshot.child("xpos").getValue(float.class));
                 //newimage.setY(dataSnapshot.child("ypos").getValue(float.class));
+                absoluteid = dataSnapshot.getKey();
                 image2.setX(dataSnapshot.child("xpos").getValue(float.class));
                 image2.setY(dataSnapshot.child("ypos").getValue(float.class));
 
@@ -313,7 +315,8 @@ public class RoomActivity extends AppCompatActivity {
                         public void onClick(View v) {
 
                             Intent intent = new Intent(getApplicationContext(), FurnitureActivity.class);
-                            intent.putExtra("furnitureid", newUID);
+                            intent.putExtra("furnitureid", absoluteid);
+                            intent.putExtra("furniturename", "침대");
                             intent.putExtra("category",category);
                             intent.putExtra("familyid", familyid);
                             startActivity(intent);
