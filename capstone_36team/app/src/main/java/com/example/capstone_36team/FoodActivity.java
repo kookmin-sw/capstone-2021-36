@@ -326,7 +326,7 @@ public class FoodActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
 
-        getSupportActionBar().setTitle(category);
+        getSupportActionBar().setTitle("Food");
     }
 
 //    public void mkChildEventListener(ArrayAdapter<String> adapter){

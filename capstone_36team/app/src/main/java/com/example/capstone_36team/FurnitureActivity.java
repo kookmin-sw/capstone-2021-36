@@ -58,6 +58,7 @@ public class FurnitureActivity extends AppCompatActivity {
     private Button btn_add_item;
     private Dialog dialog03;
     private Dialog dialog05;
+    private Dialog dialog06;
     String Barcodedata ;
     String name;
     String company;
@@ -94,6 +95,10 @@ public class FurnitureActivity extends AppCompatActivity {
         dialog05 = new Dialog(FurnitureActivity.this);       // Dialog 초기화
         dialog05.requestWindowFeature(Window.FEATURE_NO_TITLE); // 타이틀 제거
         dialog05.setContentView(R.layout.plus_dialog_layout_nofood);
+        dialog06 = new Dialog(FurnitureActivity.this);       // Dialog 초기화
+        dialog06.requestWindowFeature(Window.FEATURE_NO_TITLE); // 타이틀 제거
+        dialog06.setContentView(R.layout.plus_dialog_layout_nofood);
+
 
         Intent ItemIntent = getIntent();
         itemname = ItemIntent.getStringExtra("itemname");
@@ -137,6 +142,13 @@ public class FurnitureActivity extends AppCompatActivity {
         //ListAdapter oAdapter = new ListAdapter(oData);
         final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1);
         listView_item.setAdapter(adapter);
+        listView_item.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                showdialog06();
+            }
+        });
 
         conditionRef.addChildEventListener(new ChildEventListener() {
             @Override
@@ -479,6 +491,31 @@ public class FurnitureActivity extends AppCompatActivity {
         if(nValue == null)
             return null;
         return nValue.getNodeValue();
+    }
+    public void showdialog06(){
+        dialog06.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+
+        dialog06.show();
+        EditText fnameinput = (EditText)dialog06.findViewById(R.id.fnameInput2);
+        EditText fposinput = (EditText)dialog06.findViewById(R.id.fposInput2);
+        EditText fcountinput = (EditText)dialog06.findViewById(R.id.fcountInput2);
+        Button button = (Button)dialog06.findViewById(R.id.plus_button2);
+        button.setText("변경");
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { //변경버튼 클릭했을떄
+
+            }
+        });
+        Button button1 = (Button)dialog06.findViewById(R.id.no_plus_button2) ;
+        button1.setText("삭제");
+        button1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 삭제버튼 클릭했을떄
+            }
+        });
     }
 
 
