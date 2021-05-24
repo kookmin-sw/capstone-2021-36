@@ -144,7 +144,8 @@ public class FoodActivity extends AppCompatActivity {
     private ListView flist;
 
     //private String user_name = "testuid";
-    private String[] names = {"abc<가구1<방1", "ab2<가구2<방1"}; //////{"물품<장소", "물품<장소" "물품<장소"이런식으로 데이터가 들어왔음 좋겠습니다.}
+    private String[] names; //////{"물품<장소", "물품<장소" "물품<장소"이런식으로 데이터가 들어왔음 좋겠습니다.}
+    private ArrayList<String> nameslist;
 
     private String familyname;
     Room Fridge;
@@ -216,7 +217,10 @@ public class FoodActivity extends AppCompatActivity {
         flist.setAdapter(adapter);
         Intent refnameIntent = getIntent();
         String fridgename = refnameIntent.getStringExtra("fridgename");
+        String fridgername = refnameIntent.getStringExtra("category");
         Fridge = new Room(fridgename);
+        nameslist = new ArrayList<String>();
+
 
         category = refnameIntent.getStringExtra("category");
         //user_name = refnameIntent.getStringExtra("userid");
@@ -227,9 +231,10 @@ public class FoodActivity extends AppCompatActivity {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-                adapter.add(dataSnapshot.getKey());
+                adapter.add(dataSnapshot.child("name").getValue(String.class));
                 Product p = new Product(dataSnapshot.getKey(),dataSnapshot.child("name").getValue(String.class), dataSnapshot.child("placedetail").getValue(String.class), dataSnapshot.child("count").getValue(Integer.class));
                 Fridge.addProduct(p);
+                nameslist.add(dataSnapshot.child("name").getValue(String.class) + "<" + fridgername);
                 //Log.d("MainActivity", "ChildEventListener - onChildAdded : " + dataSnapshot + dataSnapshot.getKey());
 //                fItem.strTitle =  "t";//dataSnapshot.getKey(); //strTitle -> 물품 이름
 //                fItem.strDate =  "1";//dataSnapshot.child("count").getValue(String.class);
@@ -907,14 +912,14 @@ public class FoodActivity extends AppCompatActivity {
     public void showDialog07_1(){  //자동완성 다이얼로그
         dialog07_1.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         AutoCompleteTextView editText = dialog07_1.findViewById(R.id.actv);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, names);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, nameslist);
         editText.setAdapter(adapter);
         dialog07_1.show();
         editText.setText("");
         editText.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                item = names[position];
+                item = nameslist.get(position);
                 int a = item.indexOf("<");
                 item = item.substring(0,a);
 
@@ -932,6 +937,16 @@ public class FoodActivity extends AppCompatActivity {
         dialog08.show();
         dialog08.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         EditText editText = dialog08.findViewById(R.id.fnameInput);
+
+        EditText fnameinput = (EditText)dialog08.findViewById(R.id.fnameInput);
+        EditText fposinput = (EditText)dialog08.findViewById(R.id.fposInput);
+        EditText fcountinput = (EditText)dialog08.findViewById(R.id.fcountInput);
+        Product searchProduct = Fridge.searchProduct(item);
+        fnameinput.setText(searchProduct.getName());
+        fposinput.setText(searchProduct.getDetailPlace());
+        fcountinput.setText(String.valueOf(searchProduct.getCount()));
+
+
         ////@@@@@@@@@@@@@@@@@@@@@@@@@@@///DB를 가져와서, 모든정보 다이얼로그에 띄워주기//////@@@@@@@@@@@@@@@@@@@@@//
 
         editText.setText(item);//////////.....상세장소,,,유통기한까지////////////setText로 띄워주기
@@ -941,6 +956,16 @@ public class FoodActivity extends AppCompatActivity {
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String newfoodname = fnameinput.getText().toString();
+                String newf_detail_place = fposinput.getText().toString();
+                int newfcount = Integer.parseInt(fcountinput.getText().toString());
+                Map<String, Object> ctaskMap = new HashMap<String, Object>();
+                ctaskMap.put("name", newfoodname);
+                ctaskMap.put("count", newfcount);
+                ctaskMap.put("placedetail", newf_detail_place);
+                //conditionRef.updateChildren(ctaskMap);
+                conditionRef.child(searchProduct.getId()).updateChildren(ctaskMap);
+                setAlarm();
                 /////////////////////////////////'@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@////////-> 변경사항은 저장해주기
                 dialog08.dismiss();
                 Toast.makeText(FoodActivity.this,"변경사항이 저장되었습니다.", Toast.LENGTH_SHORT).show();
