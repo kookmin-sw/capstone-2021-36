@@ -7,6 +7,8 @@
 
 ### 1. :bulb: 프로젝트 소개
 
+[시연영상](https://www.youtube.com/watch?v=ol2jeIyQY4o)
+
 
 
 # 하우스피디아(HousePedia)
