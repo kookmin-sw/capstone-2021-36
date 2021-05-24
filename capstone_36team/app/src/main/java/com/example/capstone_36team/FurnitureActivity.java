@@ -24,6 +24,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.gun0912.tedpermission.PermissionListener;
@@ -41,6 +46,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -57,10 +63,18 @@ public class FurnitureActivity extends AppCompatActivity {
     String company;
     String key = "593cd6a3496d4e1194ff";
     String itemname;
+    String category;
 
     private Button modify;
     private Dialog dialog02;
     AlertDialog.Builder builder;
+    private String familyid;
+    Room Furniture;
+    UUID newUID;
+    String furnitureid;
+    DatabaseReference mDatabase= FirebaseDatabase.getInstance().getReference();
+    DatabaseReference conditionRef;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +99,15 @@ public class FurnitureActivity extends AppCompatActivity {
         itemname = ItemIntent.getStringExtra("itemname");
         getSupportActionBar().setTitle(itemname);
 
+        Intent refnameIntent = getIntent();
+
+
+        category = refnameIntent.getStringExtra("category");
+        furnitureid = refnameIntent.getStringExtra("furnitureid");
+        String furniturename = refnameIntent.getStringExtra("furniturename");
+        familyid = refnameIntent.getStringExtra("familyid");
+        conditionRef = mDatabase.child("HomeDB").child(familyid).child("roomlist").child(category).child("furniturelist").child(furnitureid).child("productlist");
+        Furniture = new Room(furniturename);
 
 
 
@@ -97,22 +120,63 @@ public class FurnitureActivity extends AppCompatActivity {
         });
 
         ///////여기부터 리스트뷰 관련/////////
-        String[] strDate = {"1", "2", "3", "1", "5", "6"};  //strDate -> 물품 수량
-        int nDatCnt=0;
-        ArrayList<ItemData> oData = new ArrayList<>();
-        for (int i=0; i<strDate.length ; ++i)
-        {
-            ItemData oItem = new ItemData();
-            oItem.strTitle = "데이터 " + (i+1); //strTitle -> 물품 이름
-            oItem.strDate = strDate[nDatCnt++];
-            oData.add(oItem);
-            if (nDatCnt >= strDate.length) nDatCnt = 0;
-        }
+//        String[] strDate = {"1", "2", "3", "1", "5", "6"};  //strDate -> 물품 수량
+//        int nDatCnt=0;
+//        ArrayList<ItemData> oData = new ArrayList<>();
+//        for (int i=0; i<strDate.length ; ++i)
+//        {
+//            ItemData oItem = new ItemData();
+//            oItem.strTitle = "데이터 " + (i+1); //strTitle -> 물품 이름
+//            oItem.strDate = strDate[nDatCnt++];
+//            oData.add(oItem);
+//            if (nDatCnt >= strDate.length) nDatCnt = 0;
+//        }
 
 // ListView, Adapter 생성 및 연결 ------------------------
+        //ArrayList<ItemData> oData = new ArrayList<>();
+        //ListAdapter oAdapter = new ListAdapter(oData);
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1);
+        listView_item.setAdapter(adapter);
 
-        ListAdapter oAdapter = new ListAdapter(oData);
-        listView_item.setAdapter(oAdapter);
+        conditionRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                //ItemData oItem = new ItemData(dataSnapshot.child("name").getValue(String.class), dataSnapshot.child("count").getValue(Integer.class).toString());
+                //oData.add(oItem);
+                adapter.add(dataSnapshot.child("name").getValue(String.class));
+                Product p = new Product(dataSnapshot.getKey(),dataSnapshot.child("name").getValue(String.class), dataSnapshot.child("placedetail").getValue(String.class), dataSnapshot.child("count").getValue(Integer.class));
+                Furniture.addProduct(p);
+
+                //Log.d("MainActivity", "ChildEventListener - onChildAdded : " + dataSnapshot + dataSnapshot.getKey());
+//                fItem.strTitle =  "t";//dataSnapshot.getKey(); //strTitle -> 물품 이름
+//                fItem.strDate =  "1";//dataSnapshot.child("count").getValue(String.class);
+//                fData.add(fItem);
+                Log.d("MainActivity", "ChildEventListener - onChildChanged : ");
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                Furniture.updateProduct(dataSnapshot.getKey(),dataSnapshot.child("name").getValue(String.class), dataSnapshot.child("placedetail").getValue(String.class), dataSnapshot.child("count").getValue(Integer.class));
+                Log.d("MainActivity", "ChildEventListener - onChildChanged : " + dataSnapshot);
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                //adapter.remove(dataSnapshot.getKey());
+                Furniture.delProduct(dataSnapshot.child("name").getValue(String.class));
+                Log.d("MainActivity", "ChildEventListener - onChildRemoved : " + dataSnapshot.getKey());
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                Log.d("MainActivity", "ChildEventListener - onChildMoved" + s);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.d("MainActivity", "ChildEventListener - onCancelled" + databaseError.getMessage());
+            }
+        });
 
 
 
@@ -183,6 +247,29 @@ public class FurnitureActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) { //등록
 
+                EditText fnameinput = (EditText)dialog02.findViewById(R.id.fnameInput2);
+                EditText fposinput = (EditText)dialog02.findViewById(R.id.fposInput2);
+                EditText fcountinput = (EditText)dialog02.findViewById(R.id.fcountInput2);
+
+
+
+
+                String foodname = fnameinput.getText().toString();
+                String f_detail_place = fposinput.getText().toString();
+                int fcount = Integer.parseInt(fcountinput.getText().toString());
+                Map<String, Object> taskMap = new HashMap<String, Object>();
+                taskMap.put("name", foodname);
+                taskMap.put("count", fcount);
+                taskMap.put("placedetail", f_detail_place);
+
+                newUID = UUID.randomUUID();
+                String nfoodid = newUID.toString();
+
+                conditionRef.child(nfoodid).setValue(taskMap);
+                //conditionRef = mDatabase.child("HomeDB").child("family2").child("Fridge");
+                Log.d("확인", foodname);
+
+
                 ///////foodActivity에서의 물품추가 dialog와 다른 layout 파일(plus_dialog_layout_nofood.xml) 사용했어요!!!!!@@@@@@@
                 ////유통기한이 없어요/////
                 //////여기서 EditText에 써진 DB추가 필요해요/////////////
@@ -239,7 +326,7 @@ public class FurnitureActivity extends AppCompatActivity {
         searchbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) { //삭제 클릭했을때
-
+                conditionRef.getParent().setValue(null);
                 ////////////////여기서 DB삭제되게//////////
 
                 dialog03.dismiss();
