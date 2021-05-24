@@ -313,7 +313,7 @@ public class RoomActivity extends AppCompatActivity {
                     v.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-
+                            if (absoluteid == null){absoluteid = UUID.randomUUID().toString();}
                             Intent intent = new Intent(getApplicationContext(), FurnitureActivity.class);
                             intent.putExtra("furnitureid", absoluteid);
                             intent.putExtra("furniturename", "침대");
