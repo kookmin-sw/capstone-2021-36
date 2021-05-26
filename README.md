@@ -94,7 +94,7 @@
 
 
 ### 5. :key: 사용법
-
+다운로드 링크 : https://www.dropbox.com/s/lb7hbxdyagzhx4e/%ED%95%98%EC%9A%B0%EC%8A%A4%ED%94%BC%EB%94%94%EC%95%84.apk?dl=0
 
 
 ### 6. 기타
