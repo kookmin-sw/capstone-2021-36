@@ -50,6 +50,16 @@ public class Room {
             };
         }
     }
+    public Product searchProductbyid(String key){
+        for(int i=0;i<Plist.size();i++){
+            Product ptemp = Plist.get(i);
+            String pkey = ptemp.getId();
+            if(pkey.equals(key)){
+                return Plist.get(i);
+            };
+        }
+        return null;
+    }
     public Product getProductByIndex(int index){
         return Plist.get(index);
     }

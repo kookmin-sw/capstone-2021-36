@@ -4,7 +4,7 @@ public class Product {
     String id;
     String name;
     int count;
-    int date = 0;
+    String date;
     String placedetail;
     String placelog;
     public Product(String iid,String iname, String iplace ,int icount){
@@ -13,7 +13,7 @@ public class Product {
         count = icount;
         placedetail = iplace;
     }
-    public Product(String iid,String iname, String iplace ,int icount, int idate){
+    public Product(String iid,String iname, String iplace ,int icount, String idate){
         id = iid;
         name = iname;
         count = icount;
@@ -48,7 +48,7 @@ public class Product {
     public void downCount(){
         count -= 1;
     }
-    public int getDate(){
+    public String  getDate(){
         return date;
     }
 

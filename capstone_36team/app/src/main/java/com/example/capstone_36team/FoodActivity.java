@@ -150,7 +150,7 @@ public class FoodActivity extends AppCompatActivity {
     private String familyname;
     Room Fridge;
     UUID newUID;
-
+    ArrayAdapter<String> adapter;
 
 
 
@@ -213,7 +213,7 @@ public class FoodActivity extends AppCompatActivity {
         // ListAdapter fAdapter = new ListAdapter(fData);
         //flist.setAdapter(fAdapter);
 
-        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1);
+        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1);
         flist.setAdapter(adapter);
         Intent refnameIntent = getIntent();
         String fridgename = refnameIntent.getStringExtra("fridgename");
@@ -232,7 +232,7 @@ public class FoodActivity extends AppCompatActivity {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
                 adapter.add(dataSnapshot.child("name").getValue(String.class));
-                Product p = new Product(dataSnapshot.getKey(),dataSnapshot.child("name").getValue(String.class), dataSnapshot.child("placedetail").getValue(String.class), dataSnapshot.child("count").getValue(Integer.class));
+                Product p = new Product(dataSnapshot.getKey(),dataSnapshot.child("name").getValue(String.class), dataSnapshot.child("placedetail").getValue(String.class), dataSnapshot.child("count").getValue(Integer.class),dataSnapshot.child("date").getValue(String.class));
                 Fridge.addProduct(p);
                 nameslist.add(dataSnapshot.child("name").getValue(String.class) + "<" + fridgername);
                 //Log.d("MainActivity", "ChildEventListener - onChildAdded : " + dataSnapshot + dataSnapshot.getKey());
@@ -244,13 +244,19 @@ public class FoodActivity extends AppCompatActivity {
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                String oldname = Fridge.searchProductbyid(dataSnapshot.getKey()).getName();
                 Fridge.updateProduct(dataSnapshot.getKey(),dataSnapshot.child("name").getValue(String.class), dataSnapshot.child("placedetail").getValue(String.class), dataSnapshot.child("count").getValue(Integer.class));
+                int pos = adapter.getPosition(oldname);
+                adapter.remove(oldname);
+                adapter.insert(dataSnapshot.child("name").getValue(String.class), pos);
+                adapter.notifyDataSetChanged();
                 Log.d("MainActivity", "ChildEventListener - onChildChanged : " + dataSnapshot);
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                adapter.remove(dataSnapshot.getKey());
+                adapter.remove(dataSnapshot.child("name").getValue(String.class));
+                adapter.notifyDataSetChanged();
                 Fridge.delProduct(dataSnapshot.child("name").getValue(String.class));
                 Log.d("MainActivity", "ChildEventListener - onChildRemoved : " + dataSnapshot.getKey());
             }
@@ -637,6 +643,7 @@ public class FoodActivity extends AppCompatActivity {
         dateset = (Button)dialog02.findViewById(R.id.dateset);
         dateset.setText(getTodaysDate());
         dialog02.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        plus_button.setText("등록");
 
 
         dialog02.show(); // 다이얼로그 띄우기
@@ -656,14 +663,16 @@ public class FoodActivity extends AppCompatActivity {
                 String foodname = fnameinput.getText().toString();
                 String f_detail_place = fposinput.getText().toString();
                 int fcount = Integer.parseInt(fcountinput.getText().toString());
+                String dlimit = dateset.getText().toString();
                 Map<String, Object> taskMap = new HashMap<String, Object>();
                 taskMap.put("name", foodname);
                 taskMap.put("count", fcount);
                 taskMap.put("placedetail", f_detail_place);
+                taskMap.put("date", dlimit);
 
                 newUID = UUID.randomUUID();
                 String nfoodid = newUID.toString();
-
+                setAlarm(dlimit);
                 conditionRef.child(nfoodid).setValue(taskMap);
                 //conditionRef = mDatabase.child("HomeDB").child("family2").child("Fridge");
                 Log.d("확인", foodname);
@@ -687,16 +696,16 @@ public class FoodActivity extends AppCompatActivity {
         });
     }
 
-    private void setAlarm() {
+    private void setAlarm(String date) {
         //AlarmReceiver에 값 전달
         Intent receiverIntent = new Intent(FoodActivity.this, AlarmRecevier.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(FoodActivity.this, 0, receiverIntent, 0);
 
-        String from = date + " 00:00:00";
+        String from = date + " 07:00:00";
         //String from = "2021-05-17 03:37:00"; //임의로 날짜와 시간을 지정
 
         //날짜 포맷을 바꿔주는 소스코드
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy년MM월dd일 HH:mm:ss");
         Date datetime = null;
         try {
             datetime = dateFormat.parse(from);
@@ -838,12 +847,12 @@ public class FoodActivity extends AppCompatActivity {
         dialog02.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         initDatePicker();
         dateset = (Button)dialog02.findViewById(R.id.dateset);
-        dateset.setText(getTodaysDate());
 
         dialog02.show(); // 다이얼로그 띄우기
         EditText fnameinput = (EditText)dialog02.findViewById(R.id.fnameInput);
         EditText fposinput = (EditText)dialog02.findViewById(R.id.fposInput);
         EditText fcountinput = (EditText)dialog02.findViewById(R.id.fcountInput);
+        dateset.setText(Fridge.getProductByIndex(index).getDate());
         fnameinput.setText(Fridge.getProductByIndex(index).getName());
         fposinput.setText(Fridge.getProductByIndex(index).getDetailPlace());
         fcountinput.setText(String.valueOf(Fridge.getProductByIndex(index).getCount()));//DB에서 받아와서 표시해주어야함///////////////////////
@@ -863,7 +872,10 @@ public class FoodActivity extends AppCompatActivity {
                 ctaskMap.put("placedetail", newf_detail_place);
                 //conditionRef.updateChildren(ctaskMap);
                 conditionRef.child(fid).updateChildren(ctaskMap);
-                setAlarm();
+                //adapter.remove(Fridge.getProductByIndex(index).getName());
+                //adapter.insert(newfoodname, index);
+                //adapter.notifyDataSetChanged();
+                //setAlarm();
                 dialog02.dismiss(); // 다이얼로그 닫기
                 ////////////////////////////////////EditText에 적은것 DB에 반영/////////////////////////////////
 
@@ -890,6 +902,7 @@ public class FoodActivity extends AppCompatActivity {
         Button button1 = dialog07.findViewById(R.id.btn_search_result);
         TextView textView = dialog07.findViewById(R.id.text_search_result);
         String fid = Fridge.getProductByIndex(index).getId();
+        //String fname = Fridge.getProductByIndex(index).getName();
         button1.setText("네");
         textView.setText("정말 삭제하시겠습니까?");
         textView.setTextSize(20);
@@ -901,6 +914,8 @@ public class FoodActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) { //네 선택하였을떄
                 conditionRef.child(fid).setValue(null);
+                //adapter.remove(fname);
+                //adapter.notifyDataSetChanged();
 
 
                 ////////////////////////DB 삭제////////////////////////
@@ -933,7 +948,6 @@ public class FoodActivity extends AppCompatActivity {
     public void showDialog08(){
         initDatePicker();
         dateset = (Button)dialog08.findViewById(R.id.dateset);
-        dateset.setText(getTodaysDate());
         dialog08.show();
         dialog08.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         EditText editText = dialog08.findViewById(R.id.fnameInput);
@@ -942,6 +956,7 @@ public class FoodActivity extends AppCompatActivity {
         EditText fposinput = (EditText)dialog08.findViewById(R.id.fposInput);
         EditText fcountinput = (EditText)dialog08.findViewById(R.id.fcountInput);
         Product searchProduct = Fridge.searchProduct(item);
+        dateset.setText(searchProduct.getDate());
         fnameinput.setText(searchProduct.getName());
         fposinput.setText(searchProduct.getDetailPlace());
         fcountinput.setText(String.valueOf(searchProduct.getCount()));
@@ -965,7 +980,7 @@ public class FoodActivity extends AppCompatActivity {
                 ctaskMap.put("placedetail", newf_detail_place);
                 //conditionRef.updateChildren(ctaskMap);
                 conditionRef.child(searchProduct.getId()).updateChildren(ctaskMap);
-                setAlarm();
+                //setAlarm();
                 /////////////////////////////////'@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@////////-> 변경사항은 저장해주기
                 dialog08.dismiss();
                 Toast.makeText(FoodActivity.this,"변경사항이 저장되었습니다.", Toast.LENGTH_SHORT).show();

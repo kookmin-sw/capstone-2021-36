@@ -108,7 +108,7 @@ public class DashboardFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String fridgename = fridgemap.get((String)parent.getItemAtPosition(position));
-                category = fridgemap.get((String)parent.getItemAtPosition(position));
+                category = (String)parent.getItemAtPosition(position);
                 Intent intent = new Intent(getActivity(), FoodActivity.class);
                 intent.putExtra("fridgename",fridgename);
                 intent.putExtra("userid",userid);
