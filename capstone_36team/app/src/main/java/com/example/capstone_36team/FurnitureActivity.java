@@ -170,13 +170,19 @@ public class FurnitureActivity extends AppCompatActivity {
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                String oldname = Furniture.searchProductbyid(dataSnapshot.getKey()).getName();
                 Furniture.updateProduct(dataSnapshot.getKey(),dataSnapshot.child("name").getValue(String.class), dataSnapshot.child("placedetail").getValue(String.class), dataSnapshot.child("count").getValue(Integer.class));
+                int pos = adapter.getPosition(oldname);
+                adapter.remove(oldname);
+                adapter.insert(dataSnapshot.child("name").getValue(String.class), pos);
+                adapter.notifyDataSetChanged();
                 Log.d("MainActivity", "ChildEventListener - onChildChanged : " + dataSnapshot);
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                adapter.remove(dataSnapshot.getKey());
+                adapter.remove(dataSnapshot.child("name").getValue(String.class));
+                adapter.notifyDataSetChanged();
                 Furniture.delProduct(dataSnapshot.child("name").getValue(String.class));
                 Log.d("MainActivity", "ChildEventListener - onChildRemoved : " + dataSnapshot.getKey());
             }
@@ -255,9 +261,10 @@ public class FurnitureActivity extends AppCompatActivity {
 
 
         dialog02.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog02.show(); // 다이얼로그 띄우기
 
         Button plus_button = dialog02.findViewById(R.id.plus_button2);
+        plus_button.setText("등록");
+        dialog02.show(); // 다이얼로그 띄우기
         plus_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) { //등록

@@ -65,7 +65,6 @@ public class RoomActivity extends AppCompatActivity {
     private String userid;
     private String familyid;
     UUID newUID;
-    String absoluteid;
     DatabaseReference mDatabase= FirebaseDatabase.getInstance().getReference();
     //DatabaseReference userRef = mDatabase.child("UserDB").child(userid);
     DatabaseReference conditionRef;
@@ -80,6 +79,7 @@ public class RoomActivity extends AppCompatActivity {
     String category;
     GridLayout g;
     int h;
+    Map<String, String> iiduidmap;
 
 
     private void tostMsg1() {
@@ -129,6 +129,7 @@ public class RoomActivity extends AppCompatActivity {
         category = refnameIntent.getStringExtra("category");
         //user_name = refnameIntent.getStringExtra("userid");
         familyid = refnameIntent.getStringExtra("familyid");
+        iiduidmap = new HashMap<String, String>();
         conditionRef = mDatabase.child("HomeDB").child(familyid).child("roomlist").child(category).child("furniturelist");
 
 
@@ -139,9 +140,11 @@ public class RoomActivity extends AppCompatActivity {
                 //ImageView newimage = <- 여기서 새 이미지 생성.
                 //newimage.setX(dataSnapshot.child("xpos").getValue(float.class));
                 //newimage.setY(dataSnapshot.child("ypos").getValue(float.class));
-                absoluteid = dataSnapshot.getKey();
-                image2.setX(dataSnapshot.child("xpos").getValue(float.class));
-                image2.setY(dataSnapshot.child("ypos").getValue(float.class));
+                int resourceid = getResources().getIdentifier(dataSnapshot.child("type").getValue(String.class), "id", getPackageName());
+                ImageView timage = (ImageView) findViewById(resourceid);
+                timage.setX(dataSnapshot.child("xpos").getValue(float.class));
+                timage.setY(dataSnapshot.child("ypos").getValue(float.class));
+                iiduidmap.put(dataSnapshot.child("type").getValue(String.class),dataSnapshot.getKey());
 
                 //fridgemap.put(fridgename, dataSnapshot.getKey());
                 Log.d("MainActivity", "ChildEventListener - onChildChanged : ");
@@ -284,7 +287,7 @@ public class RoomActivity extends AppCompatActivity {
             }else if(motionEvent.getAction() == MotionEvent.ACTION_UP){
                 Log.d("확인좀", String.valueOf(startYvalue));
                 if (startYvalue >= h * (1417/1808))
-                    showDialog06(v.getX(), v.getY());
+                    showDialog06(v.getX(), v.getY(), v);
 
                 // 뷰에서 손을 뗌
                 this.first = false;
@@ -312,9 +315,9 @@ public class RoomActivity extends AppCompatActivity {
                     v.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            if (absoluteid == null){absoluteid = UUID.randomUUID().toString();}
+                            String type = v.getResources().getResourceEntryName(v.getId());
                             Intent intent = new Intent(getApplicationContext(), FurnitureActivity.class);
-                            intent.putExtra("furnitureid", absoluteid);
+                            intent.putExtra("furnitureid", iiduidmap.get(type));
                             intent.putExtra("furniturename", "침대");
                             intent.putExtra("category",category);
                             intent.putExtra("familyid", familyid);
@@ -483,12 +486,13 @@ public class RoomActivity extends AppCompatActivity {
 
 
 
-    public void showDialog06(float xpos, float ypos){ //다이얼로그 함수(검색)
+    public void showDialog06(float xpos, float ypos, View v){ //다이얼로그 함수(검색)
         dialog03.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog03.show(); // 다이얼로그 띄우기
         EditText edittext_searchname = dialog03.findViewById(R.id.edittext_searchname);
         edittext_searchname.setHint("가구 이름");
         emdfhr = true;
+        String type = v.getResources().getResourceEntryName(v.getId());
 
         Button searchbutton = dialog03.findViewById(R.id.pbutton);
         Button searchbutton2 = dialog03.findViewById(R.id.nbutton);
@@ -506,7 +510,7 @@ public class RoomActivity extends AppCompatActivity {
                 taskMap.put("furniturename", furniturename);
                 taskMap.put("xpos", xpos);
                 taskMap.put("ypos", ypos);
-                taskMap.put("type", ""); // <- 여기 이미지 타입 추가.
+                taskMap.put("type", type); // <- 여기 이미지 타입 추가.
                 newUID = UUID.randomUUID();
                 String nfoodid = newUID.toString();
 
